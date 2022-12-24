@@ -10,18 +10,30 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginState.initial()) {
-    on<LoginLoginButtonPressed>(_loginButtonClicked);
     on<LoginEmailChanged>(_loginEmailChanged);
+    on<LoginPasswordChanged>(_loginPasswordChanged);
+    on<LoginLoginButtonPressed>(_loginButtonClicked);
   }
 
   FutureOr<void> _loginEmailChanged(
       LoginEmailChanged event, Emitter<LoginState> emit) {
-    emit(LoginState.initial());
+    final email = event.email;
+    final emailValid = email.length > 4;
+    emit(state.copyWith(email: email, emailIsValid: emailValid));
+  }
+
+  FutureOr<void> _loginPasswordChanged(
+      LoginPasswordChanged event, Emitter<LoginState> emit) {
+    final password = event.password;
+    final passwordValid = password.length >= 8;
+    emit(state.copyWith(password: password, passwordIsValid: passwordValid));
   }
 
   FutureOr<void> _loginButtonClicked(
       LoginLoginButtonPressed event, Emitter<LoginState> emit) {
-    emit(state.copyWith(authenticated: true));
+    if (state.passwordIsValid && state.emailIsValid) {
+      emit(state.copyWith(authenticated: true));
+    }
   }
 
   @override
