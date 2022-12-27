@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gift_manager/data/model/request_error.dart';
+import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/presentation/home/view/home_page.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
 import 'package:gift_manager/presentation/login/model/email_error.dart';
@@ -81,13 +82,10 @@ class _LoginPageWidgetState extends State<_LoginPageWidget> {
           const SizedBox(
             height: 64,
           ),
-          const Center(
+          Center(
             child: Text(
               "Вход",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 24,
-              ),
+              style: Theme.of(context).textTheme.headline2,
             ),
           ),
           const Spacer(
@@ -111,7 +109,10 @@ class _LoginPageWidgetState extends State<_LoginPageWidget> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Ещё нет аккаунта?"),
+              Text(
+                "Ещё нет аккаунта?",
+                style: context.theme.h4,
+              ),
               TextButton(
                   onPressed: () => debugPrint("Buttorn create pressed"),
                   child: const Text("Создать")),
@@ -153,6 +154,15 @@ class _LoginButton extends StatelessWidget {
                       .add(const LoginLoginButtonPressed())
                   : null,
               child: const Text("Войти"),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return Color(0xB3366EC4);
+                    }
+                    return Color(0xFF2950AF);
+                  }),
+                  textStyle: MaterialStateProperty.all(
+                      TextStyle(color: Colors.white, fontSize: 16))),
             );
           },
         ),
