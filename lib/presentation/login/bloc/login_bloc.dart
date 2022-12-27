@@ -86,7 +86,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
     return LoginError.values[Random().nextInt(LoginError.values.length)];
   }
-
+/*
   @override
   void onEvent(LoginEvent event) {
     debugPrint("Login bloc. Event happened: $event");
@@ -98,6 +98,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     debugPrint("Login bloc. Transition happened: $transition");
     super.onTransition(transition);
   }
+
+ */
 }
 
 enum LoginError {
