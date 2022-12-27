@@ -6,6 +6,7 @@ import 'package:gift_manager/presentation/home/view/home_page.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
 import 'package:gift_manager/presentation/login/model/email_error.dart';
 import 'package:gift_manager/presentation/login/model/password_error.dart';
+import 'package:gift_manager/resources/app_colors.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -111,7 +112,11 @@ class _LoginPageWidgetState extends State<_LoginPageWidget> {
             children: [
               Text(
                 "Ещё нет аккаунта?",
-                style: context.theme.h4,
+                style: context.theme.h4.dynamicColor(
+                  context: context,
+                  lightThemeColor: AppColors.lightGrey60,
+                  darkThemeColor: AppColors.darkWhite60,
+                ),
               ),
               TextButton(
                   onPressed: () => debugPrint("Buttorn create pressed"),
@@ -154,15 +159,6 @@ class _LoginButton extends StatelessWidget {
                       .add(const LoginLoginButtonPressed())
                   : null,
               child: const Text("Войти"),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith((states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Color(0xB3366EC4);
-                    }
-                    return Color(0xFF2950AF);
-                  }),
-                  textStyle: MaterialStateProperty.all(
-                      TextStyle(color: Colors.white, fontSize: 16))),
             );
           },
         ),
@@ -195,8 +191,11 @@ class _PasswordTextField extends StatelessWidget {
                 context.read<LoginBloc>().add(LoginPasswordChanged(text)),
             onSubmitted: (_) =>
                 context.read<LoginBloc>().add(LoginLoginButtonPressed()),
+            autocorrect: false,
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
             decoration: InputDecoration(
-                hintText: "Пароль",
+                labelText: "Пароль",
                 errorText: passwordError == PasswordError.noError
                     ? null
                     : passwordError.toString()),
@@ -231,8 +230,10 @@ class _EmailTextField extends StatelessWidget {
             onChanged: (text) =>
                 context.read<LoginBloc>().add(LoginEmailChanged(text)),
             onSubmitted: (_) => _passwordFocusNode.requestFocus(),
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              hintText: "Почта",
+              labelText: "Почта",
               errorText: emailError == EmailError.noError
                   ? null
                   : emailError.toString(),
