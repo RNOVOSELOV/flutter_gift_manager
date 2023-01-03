@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gift_manager/extentions/build_context.dart';
 import 'package:gift_manager/extentions/theme_extensions.dart';
+import 'package:gift_manager/presentation/home/view/home_page.dart';
 import 'package:gift_manager/presentation/registration/bloc/registration_bloc.dart';
 import 'package:gift_manager/resources/app_colors.dart';
 
@@ -89,49 +90,60 @@ class _RegistrationPageWidgetState extends State<_RegistrationPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView(children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    'Создать аккаунт',
-                    style: context.theme.h2,
+    return BlocListener<RegistrationBloc, RegistrationState>(
+      listener: (context, state) {
+        if (state is RegistrationCompleted) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const HomePage()),
+              (route) => false);
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(),
+          body: Column(
+            children: [
+              Expanded(
+                child: ListView(children: [
+                  const SizedBox(
+                    height: 8,
                   ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                _EmailTextField(
-                  emailFocusNode: _emailFocusNode,
-                  passwordFocusNode: _passwordFocusNode,
-                ),
-                _PasswordTextField(
-                  passwordFocusNode: _passwordFocusNode,
-                  passwordConfirmationFocusNode: _passwordConfirmationFocusNode,
-                ),
-                _PasswordConfirmationTextField(
-                  passwordConfirmationFocusNode: _passwordConfirmationFocusNode,
-                  nameFocusNode: _nameFocusNode,
-                ),
-                _NameTextField(
-                  nameFocusNode: _nameFocusNode,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const _AvatarWidget(),
-              ]),
-            ),
-            const _RegisterButton(),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      'Создать аккаунт',
+                      style: context.theme.h2,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  _EmailTextField(
+                    emailFocusNode: _emailFocusNode,
+                    passwordFocusNode: _passwordFocusNode,
+                  ),
+                  _PasswordTextField(
+                    passwordFocusNode: _passwordFocusNode,
+                    passwordConfirmationFocusNode:
+                        _passwordConfirmationFocusNode,
+                  ),
+                  _PasswordConfirmationTextField(
+                    passwordConfirmationFocusNode:
+                        _passwordConfirmationFocusNode,
+                    nameFocusNode: _nameFocusNode,
+                  ),
+                  _NameTextField(
+                    nameFocusNode: _nameFocusNode,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const _AvatarWidget(),
+                ]),
+              ),
+              const _RegisterButton(),
+            ],
+          ),
         ),
       ),
     );
