@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gift_manager/extentions/build_context.dart';
+import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/presentation/registration/bloc/registration_bloc.dart';
+import 'package:gift_manager/resources/app_colors.dart';
 
 class RegistrationPage extends StatelessWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -48,7 +51,47 @@ class _RegistrationPageWidgetState extends State<_RegistrationPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(child: Text('REGISTER')),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding:
+                const EdgeInsets.only(left: 8, top: 6, bottom: 6, right: 4),
+            decoration: BoxDecoration(
+              color: context.dynamicPlaneColor(
+                lightThemeColor: AppColors.lightLightBlue100,
+                darkThemeColor: AppColors.darkWhite20,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  height: 48,
+                  width: 48,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'Ваш аватар',
+                  style: context.theme.h3,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => context
+                      .read<RegistrationBloc>()
+                      .add(const RegistrationChangeAvatar()),
+                  child: const Text('Изменить'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
