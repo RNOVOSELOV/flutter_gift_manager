@@ -18,7 +18,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     final Emitter<SplashState> emit,
   ) async {
     final token = await SharedPreferenceData.getInstance().getToken();
-    if (token == null) {
+    if (token == null || token.isEmpty) {
       emit (const SplashUnauthorized());
     } else {
       emit (const SplashAuthorized());
