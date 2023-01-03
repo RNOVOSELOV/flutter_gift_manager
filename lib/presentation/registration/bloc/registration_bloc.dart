@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -10,9 +11,24 @@ part 'registration_event.dart';
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  RegistrationBloc() : super(RegistrationFieldsInfo(avatarLink: '')) {
-    on<RegistrationEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  static const _defaultAvatarKey = 'test';
+
+  static String _avatarBuilder(String key) =>
+      'https://avatars.dicebear.com/api/croodles/$key.svg';
+
+  String _avatarKey = _defaultAvatarKey;
+
+  RegistrationBloc()
+      : super(RegistrationFieldsInfo(
+            avatarLink: _avatarBuilder(_defaultAvatarKey))) {
+    on<RegistrationChangeAvatar>(_onChangeAvatar);
+  }
+
+  FutureOr<void> _onChangeAvatar(
+    final RegistrationChangeAvatar event,
+    final Emitter<RegistrationState> emit,
+  ) {
+    _avatarKey = Random().nextInt(1000000).toString();
+    emit(RegistrationFieldsInfo(avatarLink: _avatarBuilder(_avatarKey)));
   }
 }
