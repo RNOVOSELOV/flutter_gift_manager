@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:gift_manager/data/http/model/create_account_request_dto.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gift_manager/data/http/model/user_with_tokens_dto.dart';
 import 'package:gift_manager/data/http/unauthorized_api_service.dart';
 import 'package:gift_manager/data/model/request_error.dart';
-import 'package:gift_manager/data/storage/shared_preference_data.dart';
+import 'package:gift_manager/data/repository/refresh_token_repository.dart';
+import 'package:gift_manager/data/repository/token_repository.dart';
+import 'package:gift_manager/data/repository/user_repository.dart';
 import 'package:gift_manager/presentation/registration/model/errors.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 part 'registration_event.dart';
 
@@ -46,7 +44,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   RegistrationBloc()
       : super(RegistrationFieldsInfo(
-      avatarLink: _avatarBuilder(_defaultAvatarKey))) {
+            avatarLink: _avatarBuilder(_defaultAvatarKey))) {
     on<RegistrationChangeAvatar>(_onChangeAvatar);
     on<RegistrationEmailChanged>(_onEmailChanged);
     on<RegistrationEmailFocusLost>(_onEmailFocusLost);
@@ -60,69 +58,87 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     on<RegistrationCreateAccount>(_onCreateAccount);
   }
 
-  FutureOr<void> _onChangeAvatar(final RegistrationChangeAvatar event,
-      final Emitter<RegistrationState> emit,) {
+  FutureOr<void> _onChangeAvatar(
+    final RegistrationChangeAvatar event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _avatarKey = Random().nextInt(1000000).toString();
     emit(_calculateFieldsInfo());
   }
 
-  FutureOr<void> _onEmailChanged(final RegistrationEmailChanged event,
-      final Emitter<RegistrationState> emit,) {
+  FutureOr<void> _onEmailChanged(
+    final RegistrationEmailChanged event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _email = event.email;
     _emailError = _validateEmail();
     emit(_calculateFieldsInfo());
   }
 
-  FutureOr<void> _onEmailFocusLost(final RegistrationEmailFocusLost event,
-      final Emitter<RegistrationState> emit,) {
+  FutureOr<void> _onEmailFocusLost(
+    final RegistrationEmailFocusLost event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _highlightEmailError = true;
     emit(_calculateFieldsInfo());
   }
 
-  FutureOr<void> _onPasswordChanged(final RegistrationPasswordChanged event,
-      final Emitter<RegistrationState> emit,) {
+  FutureOr<void> _onPasswordChanged(
+    final RegistrationPasswordChanged event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _password = event.password;
     _passwordError = _validatePassword();
     _passwordConfirmationError = _validatePasswordConfirmation();
     emit(_calculateFieldsInfo());
   }
 
-  FutureOr<void> _onPasswordFocusLost(final RegistrationPasswordFocusLost event,
-      final Emitter<RegistrationState> emit,) {
+  FutureOr<void> _onPasswordFocusLost(
+    final RegistrationPasswordFocusLost event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _highlightPasswordError = true;
     emit(_calculateFieldsInfo());
   }
 
   FutureOr<void> _onPasswordConfirmationChanged(
-      final RegistrationPasswordConfirmationChanged event,
-      final Emitter<RegistrationState> emit,) {
+    final RegistrationPasswordConfirmationChanged event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _passwordConfirmation = event.passworConfirmation;
     _passwordConfirmationError = _validatePasswordConfirmation();
     emit(_calculateFieldsInfo());
   }
 
   FutureOr<void> _onPasswordConfirmationFocusLost(
-      final RegistrationPasswordConfirmationFocusLost event,
-      final Emitter<RegistrationState> emit,) {
+    final RegistrationPasswordConfirmationFocusLost event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _highlightPasswordConfirmationError = true;
     emit(_calculateFieldsInfo());
   }
 
-  FutureOr<void> _onNameChanged(final RegistrationNameChanged event,
-      final Emitter<RegistrationState> emit,) {
+  FutureOr<void> _onNameChanged(
+    final RegistrationNameChanged event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _name = event.name;
     _nameError = _validateName();
     emit(_calculateFieldsInfo());
   }
 
-  FutureOr<void> _onNameFocusLost(final RegistrationNameFocusLost event,
-      final Emitter<RegistrationState> emit,) {
+  FutureOr<void> _onNameFocusLost(
+    final RegistrationNameFocusLost event,
+    final Emitter<RegistrationState> emit,
+  ) {
     _highlightNameError = true;
     emit(_calculateFieldsInfo());
   }
 
-  FutureOr<void> _onCreateAccount(final RegistrationCreateAccount event,
-      final Emitter<RegistrationState> emit,) async {
+  FutureOr<void> _onCreateAccount(
+    final RegistrationCreateAccount event,
+    final Emitter<RegistrationState> emit,
+  ) async {
     _highlightEmailError = true;
     _highlightPasswordError = true;
     _highlightPasswordConfirmationError = true;
@@ -137,25 +153,27 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       return;
     }
     emit(const RegistrationInProgress());
-    final token = await _register();
-    debugPrint("Token: $token");
-    SharedPreferenceData.getInstance().setToken(token);
+
+    final response = await _register();
+    if (response == null) {
+      // TODO null;
+    } else {
+      await UserRepository.getInstance().setItem(response.user);
+      await TokenRepository.getInstance().setItem(response.token);
+      await RefreshTokenRepository.getInstance().setItem(response.refreshToken);
+    }
     emit(const RegistrationCompleted());
   }
 
-  Future<String> _register() async {
-    try {
-      final response = await UnauthorizedApiService.getInstance().register(
-        email: _email,
-        password: _password,
-        name: _name,
-        avatarUrl: _avatarBuilder(_avatarKey),
-      );
-      return response?.token ?? 'null token';
-    } catch (e) {
-      //TODO
-    }
-    return 'token';
+  Future<UserWithTokensDto?> _register() async {
+    final response = await UnauthorizedApiService.getInstance().register(
+      email: _email,
+      password: _password,
+      name: _name,
+      avatarUrl: _avatarBuilder(_avatarKey),
+    );
+    // TODO errors
+    return response;
   }
 
   RegistrationFieldsInfo _calculateFieldsInfo() {
