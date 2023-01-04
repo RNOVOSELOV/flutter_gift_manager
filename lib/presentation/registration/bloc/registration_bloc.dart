@@ -1,11 +1,17 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:bloc/bloc.dart';
+import 'package:either_dart/either.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gift_manager/data/http/model/api_error.dart';
+import 'package:gift_manager/data/http/model/user_with_tokens_dto.dart';
+import 'package:gift_manager/data/http/unauthorized_api_service.dart';
 import 'package:gift_manager/data/model/request_error.dart';
-import 'package:gift_manager/data/storage/shared_preference_data.dart';
+import 'package:gift_manager/data/repository/refresh_token_repository.dart';
+import 'package:gift_manager/data/repository/token_repository.dart';
+import 'package:gift_manager/data/repository/user_repository.dart';
 import 'package:gift_manager/presentation/registration/model/errors.dart';
 
 part 'registration_event.dart';
@@ -148,15 +154,29 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     if (haveError) {
       return;
     }
-    emit (const RegistrationInProgress());
-    final token = await _register();
-    SharedPreferenceData.getInstance().setToken(token);
+    emit(const RegistrationInProgress());
+
+    final response = await _register();
+    if (response.isRight) {
+      final userWithTokensDto = response.right;
+      await UserRepository.getInstance().setItem(userWithTokensDto.user);
+      await TokenRepository.getInstance().setItem(userWithTokensDto.token);
+      await RefreshTokenRepository.getInstance()
+          .setItem(userWithTokensDto.refreshToken);
+    } else {
+      // TODO handle error
+    }
     emit(const RegistrationCompleted());
   }
 
-  Future<String> _register() async {
-    await Future.delayed(const Duration(seconds: 2));
-    return 'token';
+  Future<Either<ApiError, UserWithTokensDto>> _register() async {
+    final response = await UnauthorizedApiService.getInstance().register(
+      email: _email,
+      password: _password,
+      name: _name,
+      avatarUrl: _avatarBuilder(_avatarKey),
+    );
+    return response;
   }
 
   RegistrationFieldsInfo _calculateFieldsInfo() {
