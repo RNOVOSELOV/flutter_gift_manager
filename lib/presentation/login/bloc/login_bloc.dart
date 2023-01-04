@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:either_dart/either.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gift_manager/data/http/api_error_type.dart';
+import 'package:gift_manager/data/http/model/api_error.dart';
 import 'package:gift_manager/data/http/model/user_with_tokens_dto.dart';
 import 'package:gift_manager/data/http/unauthorized_api_service.dart';
 import 'package:gift_manager/data/model/request_error.dart';
@@ -76,31 +79,32 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final response =
           await _login(email: state.email, password: state.password);
 
-      debugPrint ("RESPONCE: $response");
-      if (response != null) {
-        await UserRepository.getInstance().setItem(response.user);
-        await TokenRepository.getInstance().setItem(response.token);
+      debugPrint("RESPONCE: $response");
+      if (response.isRight) {
+        final userWithTokens = response.right;
+        await UserRepository.getInstance().setItem(userWithTokens.user);
+        await TokenRepository.getInstance().setItem(userWithTokens.token);
         await RefreshTokenRepository.getInstance()
-            .setItem(response.refreshToken);
+            .setItem(userWithTokens.refreshToken);
         emit(state.copyWith(authenticated: true));
       } else {
-        // TODO
-        // switch (response) {
-        //   case LoginError.emailNotExist:
-        //     emit(state.copyWith(emailError: EmailError.notExist));
-        //     break;
-        //   case LoginError.wrongPassword:
-        //     emit(state.copyWith(passwordError: PasswordError.wrongPassword));
-        //     break;
-        //   case LoginError.other:
-        //     emit(state.copyWith(requestError: RequestError.unknown));
-        //     break;
-        // }
+        final apiError = response.left;
+        switch (apiError.errorType) {
+          case ApiErrorType.incorrectPassword:
+            emit(state.copyWith(passwordError: PasswordError.wrongPassword));
+            break;
+          case ApiErrorType.notFound:
+            emit(state.copyWith(emailError: EmailError.notExist));
+            break;
+          default:
+            emit(state.copyWith(requestError: RequestError.unknown));
+            break;
+        }
       }
     }
   }
 
-  Future<UserWithTokensDto?> _login({
+  Future<Either<ApiError, UserWithTokensDto>> _login({
     required final String email,
     required final String password,
   }) async {
