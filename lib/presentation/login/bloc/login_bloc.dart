@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:either_dart/either.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gift_manager/data/http/api_error_type.dart';
 import 'package:gift_manager/data/http/model/api_error.dart';
@@ -69,6 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   bool _passwordValid(final String password) {
+    //TODO uncomment
     //return _passwordRegexp.hasMatch(password);
     return password.length > 5;
   }
@@ -78,8 +78,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.loginFieldsIsValid) {
       final response =
           await _login(email: state.email, password: state.password);
-
-      debugPrint("RESPONCE: $response");
       if (response.isRight) {
         final userWithTokens = response.right;
         await UserRepository.getInstance().setItem(userWithTokens.user);

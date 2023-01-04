@@ -5,7 +5,12 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 class DioProvider {
   Dio createDio() {
     final dio = Dio(
-      BaseOptions(baseUrl: 'https://giftmanager.skill-branch.ru/api'),
+      BaseOptions(
+        baseUrl: 'https://giftmanager.skill-branch.ru/api',
+        connectTimeout: 5000,
+        receiveTimeout: 5000,
+        sendTimeout: 5000,
+      ),
     );
     if (kDebugMode) {
       dio.interceptors.add(
