@@ -44,8 +44,15 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   bool _highlightNameError = false;
   RegistrationNameError? _nameError = RegistrationNameError.empty;
 
-  RegistrationBloc()
-      : super(RegistrationFieldsInfo(
+  final UserRepository userRepository;
+  final RefreshTokenRepository refreshTokenRepository;
+  final TokenRepository tokenRepository;
+
+  RegistrationBloc({
+    required this.userRepository,
+    required this.refreshTokenRepository,
+    required this.tokenRepository,
+  }) : super(RegistrationFieldsInfo(
             avatarLink: _avatarBuilder(_defaultAvatarKey))) {
     on<RegistrationChangeAvatar>(_onChangeAvatar);
     on<RegistrationEmailChanged>(_onEmailChanged);
@@ -159,10 +166,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     final response = await _register();
     if (response.isRight) {
       final userWithTokensDto = response.right;
-      await UserRepository.getInstance().setItem(userWithTokensDto.user);
-      await TokenRepository.getInstance().setItem(userWithTokensDto.token);
-      await RefreshTokenRepository.getInstance()
-          .setItem(userWithTokensDto.refreshToken);
+      await userRepository.setItem(userWithTokensDto.user);
+      await tokenRepository.setItem(userWithTokensDto.token);
+      await refreshTokenRepository.setItem(userWithTokensDto.refreshToken);
     } else {
       // TODO handle error
     }

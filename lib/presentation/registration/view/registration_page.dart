@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gift_manager/di/service_locator.dart';
 import 'package:gift_manager/extentions/build_context.dart';
 import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/presentation/home/view/home_page.dart';
@@ -14,7 +15,7 @@ class RegistrationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegistrationBloc(),
+      create: (_) => sl.get<RegistrationBloc>(),
       child: const Scaffold(
         body: _RegistrationPageWidget(),
       ),

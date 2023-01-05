@@ -23,7 +23,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   static final _passwordRegexp =
       RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
 
-  LoginBloc() : super(LoginState.initial()) {
+  final UserRepository userRepository;
+  final RefreshTokenRepository refreshTokenRepository;
+  final TokenRepository tokenRepository;
+
+  LoginBloc({
+    required this.userRepository,
+    required this.refreshTokenRepository,
+    required this.tokenRepository,
+  }) : super(LoginState.initial()) {
     on<LoginEmailChanged>(_loginEmailChanged);
     on<LoginPasswordChanged>(_loginPasswordChanged);
     on<LoginLoginButtonPressed>(_loginButtonClicked);
@@ -80,10 +88,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           await _login(email: state.email, password: state.password);
       if (response.isRight) {
         final userWithTokens = response.right;
-        await UserRepository.getInstance().setItem(userWithTokens.user);
-        await TokenRepository.getInstance().setItem(userWithTokens.token);
-        await RefreshTokenRepository.getInstance()
-            .setItem(userWithTokens.refreshToken);
+        await userRepository.setItem(userWithTokens.user);
+        await tokenRepository.setItem(userWithTokens.token);
+        await refreshTokenRepository.setItem(userWithTokens.refreshToken);
         emit(state.copyWith(authenticated: true));
       } else {
         final apiError = response.left;

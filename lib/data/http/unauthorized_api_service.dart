@@ -6,9 +6,10 @@ import 'package:gift_manager/data/http/model/api_error.dart';
 import 'package:gift_manager/data/http/model/create_account_request_dto.dart';
 import 'package:gift_manager/data/http/model/login_request_dto.dart';
 import 'package:gift_manager/data/http/model/user_with_tokens_dto.dart';
+import 'package:gift_manager/di/service_locator.dart';
 
 class UnauthorizedApiService {
-  final _dio = DioProvider().createDio();
+  final _dio = sl.get<DioProvider>().createDio();
 
   static UnauthorizedApiService? _instance;
 

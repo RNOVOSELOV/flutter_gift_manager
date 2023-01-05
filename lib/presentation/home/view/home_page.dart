@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             StreamBuilder<UserDto?>(
-                stream: UserRepository.getInstance().observeItem(),
+                stream: sl.get<UserRepository>().observeItem(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData || snapshot.data == null) {
                     return const Text("Home page");
