@@ -5,6 +5,7 @@ import 'package:gift_manager/data/repository/refresh_token_repository.dart';
 import 'package:gift_manager/data/repository/token_repository.dart';
 import 'package:gift_manager/data/repository/user_repository.dart';
 import 'package:gift_manager/data/storage/shared_preference_data.dart';
+import 'package:gift_manager/presentation/home/bloc/home_bloc.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
 import 'package:gift_manager/presentation/registration/bloc/registration_bloc.dart';
 import 'package:gift_manager/presentation/splash/bloc/splash_bloc.dart';
@@ -65,4 +66,5 @@ void _setupBlocks() {
       ));
   sl.registerFactory(
       () => SplashBloc(tokenRepository: sl.get<TokenRepository>()));
+  sl.registerFactory(() => HomeBloc(userRepository: sl.get<UserRepository>()));
 }
