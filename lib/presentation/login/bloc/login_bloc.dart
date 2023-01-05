@@ -26,11 +26,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository userRepository;
   final RefreshTokenRepository refreshTokenRepository;
   final TokenRepository tokenRepository;
+  final UnauthorizedApiService unauthorizedApiService;
 
   LoginBloc({
     required this.userRepository,
     required this.refreshTokenRepository,
     required this.tokenRepository,
+    required this.unauthorizedApiService,
   }) : super(LoginState.initial()) {
     on<LoginEmailChanged>(_loginEmailChanged);
     on<LoginPasswordChanged>(_loginPasswordChanged);
@@ -113,7 +115,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     required final String email,
     required final String password,
   }) async {
-    final response = await UnauthorizedApiService.getInstance().login(
+    final response = await unauthorizedApiService.login(
       email: email,
       password: password,
     );

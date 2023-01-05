@@ -18,7 +18,7 @@ abstract class ReactiveRepository<T> {
 
   Future<T?> getItem() async {
     final rawItem = await getRawData();
-    if (rawItem == null) {
+    if (rawItem == null || rawItem.isEmpty) {
       return null;
     }
     return convertFromString(rawItem);

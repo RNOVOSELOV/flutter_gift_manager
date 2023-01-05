@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:gift_manager/data/http/api_error_type.dart';
 import 'package:gift_manager/data/http/dio_provider.dart';
 import 'package:gift_manager/data/http/model/api_error.dart';
 import 'package:gift_manager/data/http/model/create_account_request_dto.dart';
+import 'package:gift_manager/data/http/model/gifts_response_dto.dart';
 import 'package:gift_manager/data/http/model/login_request_dto.dart';
 import 'package:gift_manager/data/http/model/user_with_tokens_dto.dart';
 import 'package:gift_manager/di/service_locator.dart';
@@ -11,12 +14,7 @@ import 'package:gift_manager/di/service_locator.dart';
 class UnauthorizedApiService {
   final _dio = sl.get<DioProvider>().createDio();
 
-  static UnauthorizedApiService? _instance;
-
-  factory UnauthorizedApiService.getInstance() =>
-      _instance ??= UnauthorizedApiService._internal();
-
-  UnauthorizedApiService._internal();
+  UnauthorizedApiService();
 
   Future<Either<ApiError, UserWithTokensDto>> register({
     required final String email,
@@ -51,6 +49,28 @@ class UnauthorizedApiService {
       final response =
           await _dio.post('/auth/login', data: requestBody.toJson());
       return Right(UserWithTokensDto.fromJson(response.data));
+    } catch (e) {
+      return Left(_getApiError(e));
+    }
+  }
+
+  Future<Either<ApiError, GiftsResponseDto>> getAllGifts({
+    required final String token,
+    final int limit = 10,
+    final int offset = 0,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/user/gifts',
+        queryParameters: {
+          'limit': limit,
+          'offset': offset,
+        },
+        options: Options(headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $token',
+        }),
+      );
+      return Right(GiftsResponseDto.fromJson(response.data));
     } catch (e) {
       return Left(_getApiError(e));
     }

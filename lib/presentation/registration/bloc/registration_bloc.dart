@@ -47,11 +47,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final UserRepository userRepository;
   final RefreshTokenRepository refreshTokenRepository;
   final TokenRepository tokenRepository;
+  final UnauthorizedApiService unauthorizedApiService;
 
   RegistrationBloc({
     required this.userRepository,
     required this.refreshTokenRepository,
     required this.tokenRepository,
+    required this.unauthorizedApiService,
   }) : super(RegistrationFieldsInfo(
             avatarLink: _avatarBuilder(_defaultAvatarKey))) {
     on<RegistrationChangeAvatar>(_onChangeAvatar);
@@ -176,7 +178,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   }
 
   Future<Either<ApiError, UserWithTokensDto>> _register() async {
-    final response = await UnauthorizedApiService.getInstance().register(
+    final response = await unauthorizedApiService.register(
       email: _email,
       password: _password,
       name: _name,
