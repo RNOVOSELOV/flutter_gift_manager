@@ -17,3 +17,10 @@ class HomeWithUser extends HomeState {
   @override
   List<Object?> get props => [user];
 }
+
+class HomeGoToLogin extends HomeState {
+  const HomeGoToLogin();
+
+  @override
+  List<Object?> get props => const [];
+}

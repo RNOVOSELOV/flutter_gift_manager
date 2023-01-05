@@ -17,3 +17,10 @@ class HomeLogoutPushed extends HomeEvent {
   @override
   List<Object?> get props => const [];
 }
+
+class HomeExternalLogout extends HomeEvent {
+  const HomeExternalLogout();
+
+  @override
+  List<Object?> get props => const [];
+}
