@@ -4,6 +4,8 @@ import 'package:gift_manager/data/http/base_api_service.dart';
 import 'package:gift_manager/data/http/model/api_error.dart';
 import 'package:gift_manager/data/http/model/create_account_request_dto.dart';
 import 'package:gift_manager/data/http/model/login_request_dto.dart';
+import 'package:gift_manager/data/http/model/refresh_token_request_dto.dart';
+import 'package:gift_manager/data/http/model/refresh_token_response_dto.dart';
 import 'package:gift_manager/data/http/model/user_with_tokens_dto.dart';
 
 class UnauthorizedApiService extends BaseApiService {
@@ -42,6 +44,19 @@ class UnauthorizedApiService extends BaseApiService {
       final response =
           await _dio.post('/auth/login', data: requestBody.toJson());
       return UserWithTokensDto.fromJson(response.data);
+    });
+  }
+
+  Future<Either<ApiError, RefreshTokenResponseDto>> refreshToken({
+    required final String refreshToken,
+  }) async {
+    return responseOrError(() async {
+      final requestBody = RefreshTokenRequestDto(
+        refreshToken: refreshToken,
+      );
+      final response =
+          await _dio.post('/auth/refresh', data: requestBody.toJson());
+      return RefreshTokenResponseDto.fromJson(response.data);
     });
   }
 }
