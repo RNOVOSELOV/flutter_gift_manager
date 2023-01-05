@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gift_manager/data/http/authorized_api_service.dart';
 import 'package:gift_manager/data/http/model/gift_dto.dart';
 import 'package:gift_manager/data/http/model/user_dto.dart';
 import 'package:gift_manager/data/http/unauthorized_api_service.dart';
@@ -16,15 +17,13 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final UserRepository userRepository;
   final LogoutInteractor logoutInteractor;
-  final UnauthorizedApiService unauthorizedApiService;
-  final TokenRepository tokenRepository;
+  final AuthorizedApiService authorizedApiService;
 
   late final StreamSubscription _logoutSubscription;
 
   HomeBloc({
     required this.userRepository,
-    required this.unauthorizedApiService,
-    required this.tokenRepository,
+    required this.authorizedApiService,
     required this.logoutInteractor,
   }) : super(HomeInitial()) {
     on<HomePageLoaded>(_onHomePageLoaded);
@@ -42,12 +41,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final Emitter<HomeState> emit,
   ) async {
     final user = await userRepository.getItem();
-    final token = await tokenRepository.getItem();
-    if (user == null || token == null) {
+    if (user == null) {
       _logout();
     } else {
       final giftsResponse =
-          await unauthorizedApiService.getAllGifts(token: token);
+          await authorizedApiService.getAllGifts();
       final gifts =
           giftsResponse.isRight ? giftsResponse.right.gifts : const <GiftDto>[];
       emit(HomeWithUserInfo(user: user, gifts: gifts));

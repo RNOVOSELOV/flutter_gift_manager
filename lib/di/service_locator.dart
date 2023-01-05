@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:gift_manager/data/http/dio_provider.dart';
+import 'package:gift_manager/data/http/authorization_interceptor.dart';
+import 'package:gift_manager/data/http/authorized_api_service.dart';
+import 'package:gift_manager/data/http/dio_builder.dart';
 import 'package:gift_manager/data/http/unauthorized_api_service.dart';
 import 'package:gift_manager/data/repository/refresh_token_provider.dart';
 import 'package:gift_manager/data/repository/refresh_token_repository.dart';
@@ -29,7 +31,6 @@ void _setupDataProviders() {
   sl.registerLazySingleton<RefreshTokenProvider>(
     () => sl.get<SharedPreferenceData>(),
   );
-  sl.registerLazySingleton(() => DioProvider());
 }
 
 // ONLY SINGLETONS
@@ -57,9 +58,16 @@ void _setupInteractors() {
 // ONLY SINGLETONS
 void _setupComplexInteractors() {}
 
-// ONLY SINGLETONS
 void _setupApiRelatesClasses() {
-  sl.registerLazySingleton(() => UnauthorizedApiService());
+  sl.registerFactory(() => DioBuilder());
+  sl.registerLazySingleton(
+      () => AuthorizationInterceptor(sl.get<TokenRepository>()));
+  sl.registerLazySingleton(
+      () => UnauthorizedApiService(sl.get<DioBuilder>().build()));
+  sl.registerLazySingleton(() => AuthorizedApiService(sl
+      .get<DioBuilder>()
+      .addAuthorizationInterceptor(sl.get<AuthorizationInterceptor>())
+      .build()));
 }
 
 // ONLY FACTORIES
@@ -81,7 +89,6 @@ void _setupBlocks() {
   sl.registerFactory(() => HomeBloc(
         userRepository: sl.get<UserRepository>(),
         logoutInteractor: sl.get<LogoutInteractor>(),
-        unauthorizedApiService: sl.get<UnauthorizedApiService>(),
-        tokenRepository: sl.get<TokenRepository>(),
+        authorizedApiService: sl.get<AuthorizedApiService>(),
       ));
 }
