@@ -18,3 +18,9 @@ class GiftsLoadingRequest extends GiftsEvent {
   List<Object?> get props => const [];
 }
 
+class GiftsAutoLoadingRequest extends GiftsEvent {
+  const GiftsAutoLoadingRequest();
+
+  @override
+  List<Object?> get props => const [];
+}

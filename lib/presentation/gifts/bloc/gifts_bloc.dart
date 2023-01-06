@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gift_manager/data/http/authorized_api_service.dart';
 import 'package:gift_manager/data/http/model/gift_dto.dart';
 
@@ -14,12 +14,16 @@ class GiftsBloc extends Bloc<GiftsEvent, GiftsState> {
       : super(const InitialGiftsLoadingState()) {
     on<GiftsPageLoaded>(_onGiftsPageLoaded);
     on<GiftsLoadingRequest>(_onGiftsLoadingRequest);
+    on<GiftsAutoLoadingRequest>(_onGiftsAutoLoadingRequest);
   }
+
+  static const _limit = 10;
 
   final AuthorizedApiService authorizedApiService;
   final gifts = <GiftDto>[];
 
-  bool initialErrorHappened = false;
+  PaginationInfo paginationInfo = PaginationInfo.initial();
+  bool errorHappened = false;
   bool loading = false;
 
   FutureOr<void> _onGiftsPageLoaded(
@@ -36,36 +40,74 @@ class GiftsBloc extends Bloc<GiftsEvent, GiftsState> {
     await _loadGifts(emit);
   }
 
+  FutureOr<void> _onGiftsAutoLoadingRequest(
+      GiftsAutoLoadingRequest event,
+    Emitter<GiftsState> emit,
+  ) async {
+    if (errorHappened) {
+      return;
+    }
+    await _loadGifts(emit);
+  }
+
   FutureOr<void> _loadGifts(
     Emitter<GiftsState> emit,
   ) async {
     if (loading) {
       return;
     }
+    if (!paginationInfo.canLoadMore) {
+      return;
+    }
     loading = true;
     if (gifts.isEmpty) {
       emit(const InitialGiftsLoadingState());
+    } else {
+      emit (LoadedGiftsState(gifts: gifts, showLoading: true, showError: false));
     }
-    final giftsResponse = await authorizedApiService.getAllGifts();
+    final giftsResponse = await authorizedApiService.getAllGifts(
+      limit: _limit,
+      offset: paginationInfo.lastLoadedPage * _limit,
+    );
     if (giftsResponse.isLeft) {
-      initialErrorHappened = true;
+      errorHappened = true;
       if (gifts.isEmpty) {
         emit(const InitialLoadingErrorState());
       } else {
         emit(LoadedGiftsState(
-            gifts: gifts, showLoading: false, showError: true));
+            gifts: [...gifts], showLoading: false, showError: true));
       }
     } else {
-      initialErrorHappened = false;
-      if (giftsResponse.right.gifts.isEmpty) {
+      errorHappened = false;
+      final canLoadMore = giftsResponse.right.gifts.length == _limit;
+      paginationInfo = PaginationInfo(
+        canLoadMore: canLoadMore,
+        lastLoadedPage: paginationInfo.lastLoadedPage + 1,
+      );
+      if (gifts.isEmpty && giftsResponse.right.gifts.isEmpty) {
         emit(const NoGiftsState());
       } else {
-        emit(const InitialLoadingErrorState());
         gifts.addAll(giftsResponse.right.gifts);
         emit(LoadedGiftsState(
-            gifts: gifts, showLoading: true, showError: false));
+            gifts: [...gifts], showLoading: canLoadMore, showError: false));
       }
     }
     loading = false;
   }
+}
+
+class PaginationInfo extends Equatable {
+  final bool canLoadMore;
+  final int lastLoadedPage;
+
+  const PaginationInfo({
+    required this.canLoadMore,
+    required this.lastLoadedPage,
+  });
+
+  factory PaginationInfo.initial() =>
+      const PaginationInfo(canLoadMore: true, lastLoadedPage: 0);
+
+  @override
+  List<Object?> get props => [canLoadMore, lastLoadedPage];
 }
