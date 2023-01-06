@@ -2,14 +2,61 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:gift_manager/data/http/authorized_api_service.dart';
+import 'package:gift_manager/data/http/model/gift_dto.dart';
 
 part 'gifts_event.dart';
+
 part 'gifts_state.dart';
 
 class GiftsBloc extends Bloc<GiftsEvent, GiftsState> {
-  GiftsBloc() : super(InitialGiftsLoadingState()) {
-    on<GiftsEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  GiftsBloc({required this.authorizedApiService})
+      : super(const InitialGiftsLoadingState()) {
+    on<GiftsPageLoaded>(_onGiftsPageLoaded);
+    on<GiftsLoadingRequest>(_onGiftsLoadingRequest);
+  }
+
+  final AuthorizedApiService authorizedApiService;
+  final gifts = <GiftDto>[];
+
+  bool initialErrorHappened = false;
+
+  FutureOr<void> _onGiftsPageLoaded(
+    GiftsPageLoaded event,
+    Emitter<GiftsState> emit,
+  ) async {
+    await _loadGifts(emit);
+  }
+
+  FutureOr<void> _onGiftsLoadingRequest(
+    GiftsLoadingRequest event,
+    Emitter<GiftsState> emit,
+  ) async {
+    await _loadGifts(emit);
+  }
+
+  FutureOr<void> _loadGifts(
+    Emitter<GiftsState> emit,
+  ) async {
+    if (gifts.isEmpty) {
+      emit(const InitialGiftsLoadingState());
+    }
+    final giftsResponse = await authorizedApiService.getAllGifts();
+    if (giftsResponse.isLeft) {
+      initialErrorHappened = true;
+      if (gifts.isEmpty) {
+        emit(const InitialLoadingErrorState());
+      } else {
+        //TODO
+      }
+    } else {
+      //TODO return state with gifts
+      if (giftsResponse.right.gifts.isEmpty) {
+        emit(const NoGiftsState());
+      } else {
+        emit(const InitialLoadingErrorState());
+        gifts.addAll(giftsResponse.right.gifts);
+      }
+    }
   }
 }

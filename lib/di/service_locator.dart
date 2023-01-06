@@ -96,5 +96,6 @@ void _setupBlocks() {
         tokenRepository: sl.get<TokenRepository>(),
         refreshTokenRepository: sl.get<RefreshTokenRepository>(),
       ));
-  sl.registerFactory(() => GiftsBloc());
+  sl.registerFactory(
+      () => GiftsBloc(authorizedApiService: sl.get<AuthorizedApiService>()));
 }
