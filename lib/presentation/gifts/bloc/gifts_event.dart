@@ -17,3 +17,4 @@ class GiftsLoadingRequest extends GiftsEvent {
   @override
   List<Object?> get props => const [];
 }
+
