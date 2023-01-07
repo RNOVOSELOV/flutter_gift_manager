@@ -1,18 +1,24 @@
-# gift_manager
+# [<img src="https://storage.googleapis.com/cms-storage-bucket/6a07d8a62f4308d2b854.svg"  width="75">](https://flutter.dev/) &nbsp;&nbsp; Gift Manager
 
- [![N|Solid](https://storage.googleapis.com/cms-storage-bucket/6a07d8a62f4308d2b854.svg)](https://flutter.dev/)
 
-A new Flutter project.
 
-## Getting Started
+## О проекте
 
-This project is a starting point for a Flutter application.
+Meнеджер подарков - не забудьте, что когда-то хотели купить близким!
 
-A few resources to get you started if this is your first Flutter project:
+__Внимание!__
+Реализовано [API для менеджера подарков](https://votruk.notion.site/Gifts-Manager-API-fd665c83749e4758b15b3df2de645b44)
+У него есть проблема: для вновь созданного аккаунта необходимо создать __первый__ подарок "вручную", например через [Postman](https://www.postman.com/). В дальнейшем проблем с работой приложения не будет.
+Либо воспользоваться уже созданным аккаунтом: 
+```sh
+Логин: test@test.qw
+Пароль: 123456
+``` 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Развитие проекта
+
+### Версия 1.0
+
+- Реализован интерфейс, возможность создавать и сохранять подарки.
