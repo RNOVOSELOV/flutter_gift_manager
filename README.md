@@ -1,5 +1,7 @@
 # gift_manager
 
+ [![N|Solid](https://storage.googleapis.com/cms-storage-bucket/6a07d8a62f4308d2b854.svg)](https://flutter.dev/)
+
 A new Flutter project.
 
 ## Getting Started
