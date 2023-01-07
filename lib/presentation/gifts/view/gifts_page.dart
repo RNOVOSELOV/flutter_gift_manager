@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gift_manager/data/http/model/gift_dto.dart';
 import 'package:gift_manager/di/service_locator.dart';
+import 'package:gift_manager/navigation/route_name.dart';
+import 'package:gift_manager/presentation/gift/gift_page.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
 import 'package:gift_manager/resources/AppIllustrations.dart';
 import 'package:gift_manager/resources/app_colors.dart';
@@ -25,7 +27,6 @@ class _GiftsPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: BlocBuilder<GiftsBloc, GiftsState>(
         builder: (context, state) {
           if (state is InitialGiftsLoadingState) {
@@ -179,9 +180,15 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     return ListView.separated(
       controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      padding: EdgeInsets.only(
+        left: 24,
+        right: 24,
+        bottom: 32,
+        top: 32 + mediaQuery.padding.top,
+      ),
       separatorBuilder: (_, __) => const SizedBox(
         height: 12,
       ),
@@ -232,39 +239,60 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
         }
 
         final gift = widget.gifts[index - 1];
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: const Color(0xFFF0F2F7),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                gift.name,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              const Text(
-                'GIFT ITEM',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  height: 20 / 16,
-                  color: AppColors.lightGrey100,
-                ),
-              ),
-            ],
-          ),
-        );
+        return _GiftCard(gift: gift);
       },
     );
   }
 
   bool get _haveExtraBottomWidget => widget.showLoading || widget.showError;
+}
+
+class _GiftCard extends StatelessWidget {
+  const _GiftCard({
+    Key? key,
+    required this.gift,
+  }) : super(key: key);
+
+  final GiftDto gift;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(
+        RouteName.gift.route,
+        arguments: GiftPageArgs(
+          giftName: gift.name,
+        ),
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFFF0F2F7),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              gift.name,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+            ),
+            const SizedBox(
+              height: 6,
+            ),
+            const Text(
+              'GIFT ITEM',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                height: 20 / 16,
+                color: AppColors.lightGrey100,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

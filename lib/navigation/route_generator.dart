@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gift_manager/navigation/route_name.dart';
+import 'package:gift_manager/presentation/gift/gift_page.dart';
 import 'package:gift_manager/presentation/gifts/view/gifts_page.dart';
 import 'package:gift_manager/presentation/home/view/home_page.dart';
 import 'package:gift_manager/presentation/login/view/login_page.dart';
@@ -30,6 +31,17 @@ RouteFactory generateRoute() {
         return _createPageRoute(const RegistrationPage(), routeName);
       case RouteName.resetPassword:
         return _createPageRoute(const ResetPasswordPage(), routeName);
+      case RouteName.gift:
+        final args = (setting.arguments is GiftPageArgs)
+            ? (setting.arguments as GiftPageArgs)
+            : null;
+        if (args == null) {
+          debugPrint(
+              "Gift page arguments error. Received arguments: ${setting.arguments.toString()}");
+        }
+        return _createPageRoute(
+            GiftPage(args: args ?? const GiftPageArgs(giftName: 'unknown')),
+            routeName);
     }
   };
 }

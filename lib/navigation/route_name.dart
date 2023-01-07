@@ -4,6 +4,7 @@ enum RouteName {
   // "/" - изначальный route, переход на короый идет по умолчанию при старте приложения
   splash(route: "/"),
   gifts(route: "/gifts"),
+  gift(route: "/gift"),
   home(route: "/home"),
   login(route: "/login"),
   registration(route: "/registration"),
