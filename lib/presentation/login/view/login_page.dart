@@ -4,11 +4,9 @@ import 'package:gift_manager/data/model/request_error.dart';
 import 'package:gift_manager/di/service_locator.dart';
 import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/navigation/route_name.dart';
-import 'package:gift_manager/presentation/home/view/home_page.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
 import 'package:gift_manager/presentation/login/model/email_error.dart';
 import 'package:gift_manager/presentation/login/model/password_error.dart';
-import 'package:gift_manager/presentation/registration/view/registration_page.dart';
 import 'package:gift_manager/resources/app_colors.dart';
 
 class LoginPage extends StatelessWidget {

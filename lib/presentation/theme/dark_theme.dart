@@ -54,18 +54,18 @@ final darkTheme = _base.copyWith(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       textStyle: MaterialStateProperty.resolveWith(
-            (states) {
+        (states) {
           return states.contains(MaterialState.disabled)
               ? const TextStyle(
-            color: AppColors.darkWhite60,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          )
+                  color: AppColors.darkWhite60,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                )
               : const TextStyle(
-            color: AppColors.darkWhite100,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          );
+                  color: AppColors.darkWhite100,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                );
         },
       ),
       backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -95,7 +95,7 @@ final darkTheme = _base.copyWith(
             : AppColors.darkDarkBlue100;
       }),
       backgroundColor: MaterialStateProperty.resolveWith(
-            (states) => Colors.transparent,
+        (states) => Colors.transparent,
       ),
       overlayColor: MaterialStateProperty.all(
         AppColors.lightLightBlue100,
@@ -141,5 +141,17 @@ final darkTheme = _base.copyWith(
     elevation: 0,
     backgroundColor: AppColors.darkBlack100,
     foregroundColor: AppColors.darkDarkBlue100,
+  ),
+  switchTheme: _base.switchTheme.copyWith(
+    thumbColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return AppColors.darkDarkBlue100;
+      }
+    }),
+    trackColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return AppColors.darkDarkBlue100.withOpacity(0.5);
+      }
+    }),
   ),
 );

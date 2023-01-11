@@ -86,9 +86,8 @@ class _SettingsPageBlockState extends State<_SettingsPageBlock> {
           const SizedBox(
             height: 24,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-            secondary: null,
             title: Text(
               'Темная тема',
               style: context.theme.h3,
