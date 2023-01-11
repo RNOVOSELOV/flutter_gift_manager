@@ -7,6 +7,7 @@ import 'package:gift_manager/data/repository/settings_repository.dart';
 import 'package:gift_manager/data/repository/user_repository.dart';
 import 'package:gift_manager/domain/logout_interactor.dart';
 import 'package:gift_manager/presentation/settings/models/theme_value.dart';
+import 'package:gift_manager/presentation/theme/theme.dart';
 
 part 'settings_event.dart';
 
@@ -56,5 +57,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     await settingsRepository
         .setItem(SettingParameters(themeValue: event.value));
+    currentTheme.toggleTheme();
   }
 }

@@ -16,6 +16,7 @@ import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
 import 'package:gift_manager/presentation/registration/bloc/registration_bloc.dart';
 import 'package:gift_manager/presentation/settings/bloc/settings_bloc.dart';
 import 'package:gift_manager/presentation/splash/bloc/splash_bloc.dart';
+import 'package:gift_manager/presentation/theme/custom_theme.dart';
 
 final sl = GetIt.instance;
 
@@ -59,6 +60,8 @@ void _setupInteractors() {
         tokenRepository: sl.get<TokenRepository>(),
         refreshTokenRepository: sl.get<RefreshTokenRepository>(),
       ));
+  sl.registerLazySingleton(
+      () => CustomTheme(settingsRepository: sl.get<SettingsRepository>()));
 }
 
 // ONLY SINGLETONS
