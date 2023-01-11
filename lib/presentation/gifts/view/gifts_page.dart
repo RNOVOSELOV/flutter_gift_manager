@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gift_manager/data/http/model/gift_dto.dart';
 import 'package:gift_manager/di/service_locator.dart';
+import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/navigation/route_name.dart';
 import 'package:gift_manager/presentation/gift/gift_page.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
@@ -189,9 +190,7 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
         bottom: 32,
         top: 32 + mediaQuery.padding.top,
       ),
-      separatorBuilder: (_, __) => const SizedBox(
-        height: 12,
-      ),
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemCount: widget.gifts.length + 1 + (_haveExtraBottomWidget ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -268,7 +267,7 @@ class _GiftCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: const Color(0xFFF0F2F7),
+          color: Theme.of(context).cardColor,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -276,19 +275,14 @@ class _GiftCard extends StatelessWidget {
           children: [
             Text(
               gift.name,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+              style: context.theme.h2,
             ),
             const SizedBox(
               height: 6,
             ),
-            const Text(
+            Text(
               'GIFT ITEM',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                height: 20 / 16,
-                color: AppColors.lightGrey100,
-              ),
+              style: context.theme.h3,
             ),
           ],
         ),

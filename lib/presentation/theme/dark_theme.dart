@@ -23,11 +23,11 @@ final darkTheme = _base.copyWith(
       fontWeight: FontWeight.w500,
       color: AppColors.darkWhite100,
     ),
-    headline4: const TextStyle(
+    headline4: TextStyle(
       fontSize: 14,
       height: 1.15,
       fontWeight: FontWeight.w500,
-      color: AppColors.darkWhite100,
+      color: AppColors.darkWhite100.withOpacity(0.6),
     ),
     headline5: const TextStyle(
       fontSize: 12,
@@ -154,4 +154,8 @@ final darkTheme = _base.copyWith(
       }
     }),
   ),
+  bottomNavigationBarTheme: _base.bottomNavigationBarTheme.copyWith(
+    selectedItemColor: AppColors.darkDarkBlue100
+  ),
+  cardColor: AppColors.darkWhite20,
 );

@@ -140,4 +140,8 @@ final lightTheme = _base.copyWith(
       }
     }),
   ),
+  bottomNavigationBarTheme: _base.bottomNavigationBarTheme.copyWith(
+      selectedItemColor: AppColors.lightDarkBlue100
+  ),
+  cardColor: const Color(0xFFF0F2F7),
 );
