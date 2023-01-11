@@ -128,4 +128,20 @@ final lightTheme = _base.copyWith(
     backgroundColor: AppColors.lightWhite100,
     foregroundColor: AppColors.lightDarkBlue100,
   ),
+  switchTheme: _base.switchTheme.copyWith(
+    thumbColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return AppColors.lightDarkBlue100;
+      }
+    }),
+    trackColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return AppColors.lightDarkBlue100.withOpacity(0.5);
+      }
+    }),
+  ),
+  bottomNavigationBarTheme: _base.bottomNavigationBarTheme.copyWith(
+      selectedItemColor: AppColors.lightDarkBlue100
+  ),
+  cardColor: const Color(0xFFF0F2F7),
 );

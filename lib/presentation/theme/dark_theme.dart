@@ -23,11 +23,11 @@ final darkTheme = _base.copyWith(
       fontWeight: FontWeight.w500,
       color: AppColors.darkWhite100,
     ),
-    headline4: const TextStyle(
+    headline4: TextStyle(
       fontSize: 14,
       height: 1.15,
       fontWeight: FontWeight.w500,
-      color: AppColors.darkWhite100,
+      color: AppColors.darkWhite100.withOpacity(0.6),
     ),
     headline5: const TextStyle(
       fontSize: 12,
@@ -54,18 +54,18 @@ final darkTheme = _base.copyWith(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       textStyle: MaterialStateProperty.resolveWith(
-            (states) {
+        (states) {
           return states.contains(MaterialState.disabled)
               ? const TextStyle(
-            color: AppColors.darkWhite60,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          )
+                  color: AppColors.darkWhite60,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                )
               : const TextStyle(
-            color: AppColors.darkWhite100,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          );
+                  color: AppColors.darkWhite100,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                );
         },
       ),
       backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -95,7 +95,7 @@ final darkTheme = _base.copyWith(
             : AppColors.darkDarkBlue100;
       }),
       backgroundColor: MaterialStateProperty.resolveWith(
-            (states) => Colors.transparent,
+        (states) => Colors.transparent,
       ),
       overlayColor: MaterialStateProperty.all(
         AppColors.lightLightBlue100,
@@ -142,4 +142,20 @@ final darkTheme = _base.copyWith(
     backgroundColor: AppColors.darkBlack100,
     foregroundColor: AppColors.darkDarkBlue100,
   ),
+  switchTheme: _base.switchTheme.copyWith(
+    thumbColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return AppColors.darkDarkBlue100;
+      }
+    }),
+    trackColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return AppColors.darkDarkBlue100.withOpacity(0.5);
+      }
+    }),
+  ),
+  bottomNavigationBarTheme: _base.bottomNavigationBarTheme.copyWith(
+    selectedItemColor: AppColors.darkDarkBlue100
+  ),
+  cardColor: AppColors.darkWhite20,
 );

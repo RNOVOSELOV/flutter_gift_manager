@@ -86,9 +86,8 @@ class _SettingsPageBlockState extends State<_SettingsPageBlock> {
           const SizedBox(
             height: 24,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-            secondary: null,
             title: Text(
               'Темная тема',
               style: context.theme.h3,
@@ -185,6 +184,9 @@ class _LogoutButton extends StatelessWidget {
         onPressed: () {
           context.read<SettingsBloc>().add(const SettingsLogout());
         },
-        child: const Text('Выйти'));
+        child: const Text(
+          'Выйти',
+          style: TextStyle(color: AppColors.darkPink100, fontSize: 14),
+        ));
   }
 }
