@@ -5,6 +5,7 @@ import 'package:gift_manager/data/http/dio_builder.dart';
 import 'package:gift_manager/data/http/unauthorized_api_service.dart';
 import 'package:gift_manager/data/repository/refresh_token_provider.dart';
 import 'package:gift_manager/data/repository/refresh_token_repository.dart';
+import 'package:gift_manager/data/repository/settings_repository.dart';
 import 'package:gift_manager/data/repository/token_repository.dart';
 import 'package:gift_manager/data/repository/user_repository.dart';
 import 'package:gift_manager/data/storage/shared_preference_data.dart';
@@ -13,6 +14,7 @@ import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
 import 'package:gift_manager/presentation/home/bloc/home_bloc.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
 import 'package:gift_manager/presentation/registration/bloc/registration_bloc.dart';
+import 'package:gift_manager/presentation/settings/bloc/settings_bloc.dart';
 import 'package:gift_manager/presentation/splash/bloc/splash_bloc.dart';
 
 final sl = GetIt.instance;
@@ -44,6 +46,9 @@ void _setupRepositories() {
   );
   sl.registerLazySingleton(
     () => UserRepository(sl.get<SharedPreferenceData>()),
+  );
+  sl.registerLazySingleton(
+    () => SettingsRepository(sl.get<SharedPreferenceData>()),
   );
 }
 
@@ -98,4 +103,9 @@ void _setupBlocks() {
       ));
   sl.registerFactory(
       () => GiftsBloc(authorizedApiService: sl.get<AuthorizedApiService>()));
+  sl.registerFactory(() => SettingsBloc(
+        userRepository: sl.get<UserRepository>(),
+        settingsRepository: sl.get<SettingsRepository>(),
+        logoutInteractor: sl.get<LogoutInteractor>(),
+      ));
 }

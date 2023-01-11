@@ -6,7 +6,7 @@ import 'package:gift_manager/di/service_locator.dart';
 import 'package:gift_manager/navigation/route_name.dart';
 import 'package:gift_manager/presentation/gift/gift_page.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
-import 'package:gift_manager/resources/AppIllustrations.dart';
+import 'package:gift_manager/resources/app_illustrations.dart';
 import 'package:gift_manager/resources/app_colors.dart';
 
 class GiftsPage extends StatelessWidget {

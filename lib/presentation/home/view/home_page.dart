@@ -6,7 +6,7 @@ import 'package:gift_manager/presentation/gifts/view/gifts_page.dart';
 import 'package:gift_manager/presentation/home/bloc/home_bloc.dart';
 import 'package:gift_manager/presentation/home/models/bottom_tab.dart';
 import 'package:gift_manager/presentation/people/people_page.dart';
-import 'package:gift_manager/presentation/settings/settings_page.dart';
+import 'package:gift_manager/presentation/settings/view/settings_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

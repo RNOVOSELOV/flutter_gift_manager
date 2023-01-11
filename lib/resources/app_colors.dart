@@ -16,6 +16,7 @@ class AppColors {
   static const darkDarkGrey = Color(0xFF73787E);
   static const darkGrey70 = Color(0xFF73787E);
   static const darkGrey60 = Color(0x9973787E);
+  static const darkDarkGrey100 = Color (0xFF5E6369);
 
   static const lightDarkBlue100 = Color(0xFF2950AF);
   static const lightPink100 = Color(0xFFE71251);
@@ -25,6 +26,7 @@ class AppColors {
   static const lightGrey100 = Color(0xFF959595);
   static const lightGrey60 = Color(0x9963686C);
   static const lightBlack100 = Color(0xFF161B1F);
+  static const lightBlack8 = Color(0x2915192C);
 
   static const surfaceOverlay = Color(0x14212121);
   static const outline = Color(0x1F000000);

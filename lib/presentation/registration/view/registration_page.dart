@@ -6,7 +6,6 @@ import 'package:gift_manager/di/service_locator.dart';
 import 'package:gift_manager/extentions/build_context.dart';
 import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/navigation/route_name.dart';
-import 'package:gift_manager/presentation/home/view/home_page.dart';
 import 'package:gift_manager/presentation/registration/bloc/registration_bloc.dart';
 import 'package:gift_manager/resources/app_colors.dart';
 

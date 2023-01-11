@@ -8,8 +8,7 @@ enum RouteName {
   home(route: "/home"),
   login(route: "/login"),
   registration(route: "/registration"),
-  resetPassword(route: "/reset_password"),
-  ;
+  resetPassword(route: "/reset_password");
 
   static RouteName? find(String? name) =>
       values.firstWhereOrNull((routeName) => routeName.route == name);

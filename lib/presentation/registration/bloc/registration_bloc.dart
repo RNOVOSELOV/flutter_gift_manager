@@ -23,7 +23,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   static final _registrationPasswordRegExp = RegExp(r'^[a-zA-Z0-9]+$');
 
   static String _avatarBuilder(String key) =>
-      'https://avatars.dicebear.com/api/croodles/$key.svg';
+      'https://avatars.dicebear.com/api/adventurer/$key.svg';
 
   String _avatarKey = _defaultAvatarKey;
 
