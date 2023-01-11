@@ -19,7 +19,7 @@ class SettingsLogout extends SettingsEvent {
 }
 
 class SettingsThemeChanged extends SettingsEvent {
-  final ThemeValues value;
+  final ThemeMode value;
 
   const SettingsThemeChanged({required this.value});
 

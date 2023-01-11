@@ -13,7 +13,7 @@ class SettingsParametersLoaded extends SettingsState {
   final String? userName;
   final String? userEmail;
   final String? userAvatarUrl;
-  final ThemeValues? theme;
+  final ThemeMode theme;
 
   const SettingsParametersLoaded({
     required this.userName,

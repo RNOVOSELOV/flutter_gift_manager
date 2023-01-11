@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gift_manager/di/service_locator.dart';
 import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/presentation/settings/bloc/settings_bloc.dart';
-import 'package:gift_manager/presentation/settings/models/theme_value.dart';
 import 'package:gift_manager/resources/app_colors.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -31,7 +30,7 @@ class _SettingsPageWidget extends StatelessWidget {
             return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _SettingsPageBlock(theme: state.theme!),
+                  _SettingsPageBlock(theme: state.theme),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 24),
                     height: 1,
@@ -53,19 +52,23 @@ class _SettingsPageWidget extends StatelessWidget {
 class _SettingsPageBlock extends StatefulWidget {
   const _SettingsPageBlock({Key? key, required this.theme}) : super(key: key);
 
-  final ThemeValues theme;
+  final ThemeMode theme;
 
   @override
   State<_SettingsPageBlock> createState() => _SettingsPageBlockState();
 }
 
 class _SettingsPageBlockState extends State<_SettingsPageBlock> {
+  late bool _isSystemTheme;
   late bool _isDarkTheme;
+  late bool _darkThemeDisabled;
 
   @override
   void initState() {
     super.initState();
-    _isDarkTheme = widget.theme == ThemeValues.dark;
+    _isSystemTheme = widget.theme == ThemeMode.system;
+    _isDarkTheme = widget.theme == ThemeMode.dark;
+    _darkThemeDisabled = _isSystemTheme;
   }
 
   @override
@@ -89,20 +92,53 @@ class _SettingsPageBlockState extends State<_SettingsPageBlock> {
           SwitchListTile.adaptive(
             contentPadding: const EdgeInsets.symmetric(horizontal: 24),
             title: Text(
+              'Использовать тему системы',
+              style: context.theme.h3,
+            ),
+            autofocus: true,
+            value: _isSystemTheme,
+            onChanged: (value) {
+              setState(() {
+                _isSystemTheme = value;
+                if (_isSystemTheme == true) {
+                  _isDarkTheme = false;
+                }
+                _darkThemeDisabled = _isSystemTheme;
+              });
+              context
+                  .read<SettingsBloc>()
+                  .add(_getConfiguredSettingsThemeChanged());
+            },
+          ),
+          SwitchListTile.adaptive(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            title: Text(
               'Темная тема',
               style: context.theme.h3,
             ),
             autofocus: true,
             value: _isDarkTheme,
-            onChanged: (value) {
-              setState(() {
-                _isDarkTheme = value;
-              });
-              context.read<SettingsBloc>().add(SettingsThemeChanged(
-                  value: _isDarkTheme ? ThemeValues.dark : ThemeValues.light));
-            },
+            onChanged: _darkThemeDisabled
+                ? null
+                : (value) {
+                    setState(() {
+                      _isDarkTheme = value;
+                    });
+                    context
+                        .read<SettingsBloc>()
+                        .add(_getConfiguredSettingsThemeChanged());
+                  },
           ),
         ]);
+  }
+
+  SettingsThemeChanged _getConfiguredSettingsThemeChanged() {
+    if (_isSystemTheme) {
+      return const SettingsThemeChanged(value: ThemeMode.system);
+    } else if (_isDarkTheme) {
+      return const SettingsThemeChanged(value: ThemeMode.dark);
+    }
+    return const SettingsThemeChanged(value: ThemeMode.light);
   }
 }
 
@@ -139,10 +175,16 @@ class _UserDataSettings extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (avatarUri != null)
-                SvgPicture.network(
-                  avatarUri!,
+                Container(
                   height: 56,
                   width: 56,
+                  padding: const EdgeInsets.all(3),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: SvgPicture.network(
+                    avatarUri!,
+                  ),
                 ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

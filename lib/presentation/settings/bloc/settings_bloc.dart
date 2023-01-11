@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gift_manager/data/model/setting_parameters.dart';
 import 'package:gift_manager/data/repository/settings_repository.dart';
 import 'package:gift_manager/data/repository/user_repository.dart';
 import 'package:gift_manager/domain/logout_interactor.dart';
-import 'package:gift_manager/presentation/settings/models/theme_value.dart';
-import 'package:gift_manager/presentation/theme/theme.dart';
+import 'package:gift_manager/presentation/theme/custom_theme.dart';
 
 part 'settings_event.dart';
 
@@ -17,11 +17,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsRepository settingsRepository;
   final UserRepository userRepository;
   final LogoutInteractor logoutInteractor;
+  final CustomTheme customTheme;
 
   SettingsBloc({
     required this.logoutInteractor,
     required this.settingsRepository,
     required this.userRepository,
+    required this.customTheme,
   }) : super(SettingsInitial()) {
     on<SettingsPageLoaded>(onSettingsPageLoaded);
     on<SettingsLogout>(onSettingsLogout);
@@ -39,7 +41,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       userName: user?.name,
       userEmail: user?.email,
       userAvatarUrl: user?.avatarUrl,
-      theme: settings?.themeValue ?? ThemeValues.light,
+      theme: settings?.themeMode ?? ThemeMode.system,
     ));
   }
 
@@ -47,8 +49,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     SettingsLogout event,
     Emitter<SettingsState> emit,
   ) async {
-    print('Logout clicked!!!');
-    logoutInteractor.logout();
+    await logoutInteractor.logout();
   }
 
   FutureOr<void> onSettingsThemeChanged(
@@ -56,7 +57,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     await settingsRepository
-        .setItem(SettingParameters(themeValue: event.value));
-    currentTheme.toggleTheme();
+        .setItem(SettingParameters(themeMode: event.value));
+    customTheme.setThemeMode(event.value);
   }
 }

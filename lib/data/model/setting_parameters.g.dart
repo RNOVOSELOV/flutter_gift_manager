@@ -8,16 +8,16 @@ part of 'setting_parameters.dart';
 
 SettingParameters _$SettingParametersFromJson(Map<String, dynamic> json) =>
     SettingParameters(
-      themeValue: $enumDecodeNullable(_$ThemeValuesEnumMap, json['themeValue']),
+      themeMode: $enumDecodeNullable(_$ThemeModeEnumMap, json['themeMode']),
     );
 
 Map<String, dynamic> _$SettingParametersToJson(SettingParameters instance) =>
     <String, dynamic>{
-      'themeValue': _$ThemeValuesEnumMap[instance.themeValue],
+      'themeMode': _$ThemeModeEnumMap[instance.themeMode],
     };
 
-const _$ThemeValuesEnumMap = {
-  ThemeValues.light: 'light',
-  ThemeValues.dark: 'dark',
-  ThemeValues.system: 'system',
+const _$ThemeModeEnumMap = {
+  ThemeMode.system: 'system',
+  ThemeMode.light: 'light',
+  ThemeMode.dark: 'dark',
 };

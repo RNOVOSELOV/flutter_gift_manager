@@ -110,5 +110,6 @@ void _setupBlocks() {
         userRepository: sl.get<UserRepository>(),
         settingsRepository: sl.get<SettingsRepository>(),
         logoutInteractor: sl.get<LogoutInteractor>(),
+        customTheme: sl.get<CustomTheme>(),
       ));
 }
