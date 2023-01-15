@@ -10,6 +10,7 @@ import 'package:gift_manager/data/repository/token_repository.dart';
 import 'package:gift_manager/data/repository/user_repository.dart';
 import 'package:gift_manager/data/storage/shared_preference_data.dart';
 import 'package:gift_manager/domain/logout_interactor.dart';
+import 'package:gift_manager/presentation/gift/bloc/gift_bloc.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
 import 'package:gift_manager/presentation/home/bloc/home_bloc.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
@@ -77,6 +78,7 @@ void _setupApiRelatesClasses() {
   sl.registerLazySingleton(() => AuthorizedApiService(sl
       .get<DioBuilder>()
       .addAuthorizationInterceptor(sl.get<AuthorizationInterceptor>())
+      .addHeaderPostmanParameters()
       .build()));
 }
 
@@ -112,4 +114,5 @@ void _setupBlocks() {
         logoutInteractor: sl.get<LogoutInteractor>(),
         customTheme: sl.get<CustomTheme>(),
       ));
+  sl.registerFactory(() => GiftBloc());
 }

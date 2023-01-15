@@ -21,7 +21,7 @@ final lightTheme = _base.copyWith(
       fontSize: 16,
       height: 1.25,
       fontWeight: FontWeight.w500,
-      color: AppColors.lightBlack100,
+      color: AppColors.lightGrey60,
     ),
     headline4: const TextStyle(
       fontSize: 14,
@@ -37,7 +37,7 @@ final lightTheme = _base.copyWith(
     headline6: const TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w400,
-      color: AppColors.lightBlack100,
+      color: AppColors.lightGrey60,
     ),
     button: const TextStyle(
       fontSize: 14,

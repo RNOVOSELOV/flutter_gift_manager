@@ -103,6 +103,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           case ApiErrorType.notFound:
             emit(state.copyWith(emailError: EmailError.notExist));
             break;
+          case ApiErrorType.badRequest:
+            emit(state.copyWith(requestError: RequestError.badRequest));
+            break;
+          case ApiErrorType.badRequestPath:
+            emit(state.copyWith(requestError: RequestError.badRequestPath));
+            break;
+          case ApiErrorType.apiPathError:
+            emit(state.copyWith(requestError: RequestError.badRequestPath));
+            break;
           default:
             emit(state.copyWith(requestError: RequestError.unknown));
             break;

@@ -67,13 +67,15 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     on<RegistrationNameChanged>(_onNameChanged);
     on<RegistrationNameFocusLost>(_onNameFocusLost);
     on<RegistrationCreateAccount>(_onCreateAccount);
+    _avatarKey = Random(DateTime.now().millisecondsSinceEpoch).nextInt(900000000).toString();
+    emit(_calculateFieldsInfo());
   }
 
   FutureOr<void> _onChangeAvatar(
     final RegistrationChangeAvatar event,
     final Emitter<RegistrationState> emit,
   ) {
-    _avatarKey = Random().nextInt(1000000).toString();
+    _avatarKey = Random(DateTime.now().millisecondsSinceEpoch).nextInt(1000000).toString();
     emit(_calculateFieldsInfo());
   }
 

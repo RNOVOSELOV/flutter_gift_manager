@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:gift_manager/data/http/base_api_service.dart';

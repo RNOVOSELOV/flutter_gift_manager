@@ -1,6 +1,9 @@
 enum ApiErrorType {
   incorrectPassword(21),
   notFound(103),
+  badRequest (400),
+  badRequestPath (404),
+  apiPathError (null),
   missingParams("E_MISSING_OR_INVALID_PARAMS"),
   unknown('unknown');
 

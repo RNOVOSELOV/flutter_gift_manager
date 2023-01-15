@@ -1,1 +1,1 @@
-enum RequestError { noError, unknown }
+enum RequestError { noError, badRequest, badRequestPath, unknown }

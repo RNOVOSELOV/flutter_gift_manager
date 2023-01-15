@@ -5,10 +5,9 @@ import 'package:gift_manager/data/http/model/gift_dto.dart';
 import 'package:gift_manager/di/service_locator.dart';
 import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/navigation/route_name.dart';
-import 'package:gift_manager/presentation/gift/gift_page.dart';
+import 'package:gift_manager/presentation/gift/view/gift_page.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
 import 'package:gift_manager/resources/app_illustrations.dart';
-import 'package:gift_manager/resources/app_colors.dart';
 
 class GiftsPage extends StatelessWidget {
   const GiftsPage({Key? key}) : super(key: key);
@@ -182,68 +181,108 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    return ListView.separated(
-      controller: _scrollController,
-      padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        bottom: 32,
-        top: 32 + mediaQuery.padding.top,
-      ),
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemCount: widget.gifts.length + 1 + (_haveExtraBottomWidget ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return const Text(
-            'Подарки:',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
-          );
-        }
-        // Обработка ниженего элемента (отображение загрузки или ошибки в посленем элементе лист вью)
-        if (index == widget.gifts.length + 1) {
-          if (widget.showLoading) {
-            return Container(
-              height: 128,
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator(),
-            );
-          } else {
-            if (!widget.showError) {
-              debugPrint(
-                  'index == gifts.length + 1 but showLoading = false and showError = false');
-            }
-            return Container(
-              height: 128,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: const Color(0xFFFFE8F2),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.separated(
+            controller: _scrollController,
+            padding: EdgeInsets.only(
+              left: 24,
+              right: 24,
+              bottom: 32,
+              top: 32 + mediaQuery.padding.top,
+            ),
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemCount:
+                widget.gifts.length + 1 + (_haveExtraBottomWidget ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return const Text(
+                  'Подарки:',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+                );
+              }
+              // Обработка ниженего элемента (отображение загрузки или ошибки в посленем элементе лист вью)
+              if (index == widget.gifts.length + 1) {
+                if (widget.showLoading) {
+                  return const _ListViewLastProgressElement();
+                } else {
+                  if (!widget.showError) {
+                    debugPrint(
+                        'index == gifts.length + 1 but showLoading = false and showError = false');
+                  }
+                  return const _ListViewLastErrorElement();
+                }
+              }
+              final gift = widget.gifts[index - 1];
+              return _GiftCard(gift: gift);
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed(
+                RouteName.gift.route,
+                arguments: const GiftPageArgs(giftName: null),
               ),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text('Не удалось загрузить данные'),
-                  const Text('Попробуйте еще раз'),
-                  TextButton(
-                    onPressed: () => context
-                        .read<GiftsBloc>()
-                        .add(const GiftsLoadingRequest()),
-                    child: const Text('Попробовать еше раз'),
-                  ),
-                ],
-              ),
-            );
-          }
-        }
-
-        final gift = widget.gifts[index - 1];
-        return _GiftCard(gift: gift);
-      },
+              child: const Text('Добавить подарок'),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   bool get _haveExtraBottomWidget => widget.showLoading || widget.showError;
+}
+
+class _ListViewLastProgressElement extends StatelessWidget {
+  const _ListViewLastProgressElement({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 128,
+      alignment: Alignment.center,
+      child: const CircularProgressIndicator(),
+    );
+  }
+}
+
+class _ListViewLastErrorElement extends StatelessWidget {
+  const _ListViewLastErrorElement({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 128,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFFFFE8F2),
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text('Не удалось загрузить данные'),
+          const Text('Попробуйте еще раз'),
+          TextButton(
+            onPressed: () =>
+                context.read<GiftsBloc>().add(const GiftsLoadingRequest()),
+            child: const Text('Попробовать еше раз'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _GiftCard extends StatelessWidget {
@@ -260,7 +299,10 @@ class _GiftCard extends StatelessWidget {
       onTap: () => Navigator.of(context).pushNamed(
         RouteName.gift.route,
         arguments: GiftPageArgs(
+          giftId: gift.id,
           giftName: gift.name,
+          giftLink: gift.link,
+          giftPrice: gift.price,
         ),
       ),
       child: Container(

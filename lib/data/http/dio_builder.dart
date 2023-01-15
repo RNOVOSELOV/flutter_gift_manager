@@ -35,4 +35,11 @@ class DioBuilder {
     _dio.interceptors.add(interceptor);
     return this;
   }
+
+  DioBuilder addHeaderPostmanParameters() {
+//    _dio.options.contentType = 'application/json';
+//    _dio.options.headers['Content-Type'] = 'application/json';
+    _dio.options.headers['User-Agent'] = 'PostmanRuntime/7.30.0';
+    return this;
+  }
 }

@@ -9,6 +9,7 @@ class ApiError extends Equatable {
   final dynamic code;
   final String? message;
   final String? error;
+  final String? problems;
 
   factory ApiError.fromJson(final Map<String, dynamic> json) =>
       _$ApiErrorFromJson(json);
@@ -17,6 +18,7 @@ class ApiError extends Equatable {
     required this.code,
     this.message,
     this.error,
+    this.problems,
   });
 
   Map<String, dynamic> toJson() => _$ApiErrorToJson(this);

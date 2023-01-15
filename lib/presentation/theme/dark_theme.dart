@@ -23,11 +23,11 @@ final darkTheme = _base.copyWith(
       fontWeight: FontWeight.w500,
       color: AppColors.darkWhite100,
     ),
-    headline4: TextStyle(
+    headline4: const TextStyle(
       fontSize: 14,
       height: 1.15,
       fontWeight: FontWeight.w500,
-      color: AppColors.darkWhite100.withOpacity(0.6),
+      color: AppColors.darkWhite60,
     ),
     headline5: const TextStyle(
       fontSize: 12,
@@ -37,7 +37,7 @@ final darkTheme = _base.copyWith(
     headline6: const TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w400,
-      color: AppColors.darkWhite100,
+      color: AppColors.darkWhite60,
     ),
     button: const TextStyle(
       fontSize: 14,

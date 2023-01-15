@@ -166,7 +166,7 @@ class _UserDataSettings extends StatelessWidget {
           ),
           Text(
             'Мои данные',
-            style: context.theme.h2,
+            style: context.theme.h1,
           ),
           const SizedBox(
             height: 16,
@@ -194,14 +194,17 @@ class _UserDataSettings extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 12),
                     child: Text(
                       name ?? '',
-                      style: context.theme.h3,
+                      style: context.theme.h2,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 8,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
                     child: Text(
                       email ?? '',
-                      style: context.theme.h4,
+                      style: context.theme.h3,
                     ),
                   ),
                   const _LogoutButton(),

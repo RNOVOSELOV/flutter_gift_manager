@@ -66,16 +66,20 @@ class _LoginPageWidgetState extends State<_LoginPageWidget> {
         BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state.requestError != RequestError.noError) {
+              String warningMessage = '';
+              if (state.requestError == RequestError.badRequest || state.requestError == RequestError.badRequestPath) {
+                warningMessage = ' ошибка в запросе';
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Text(
-                    "Произошла ошибка",
-                    style: TextStyle(color: Colors.white),
+                  content: Text(
+                    "Произошла ошибка $warningMessage",
+                    style: const TextStyle(color: Colors.white),
                   ),
                   backgroundColor: Colors.red[900],
                 ),
               );
-              context.read<LoginBloc>().add(LoginRequestErrorShowed());
+              context.read<LoginBloc>().add(const LoginRequestErrorShowed());
             }
           },
         ),
@@ -200,7 +204,7 @@ class _PasswordTextField extends StatelessWidget {
                 labelText: "Пароль",
                 errorText: passwordError == PasswordError.noError
                     ? null
-                    : passwordError.toString()),
+                    : 'Введен неверный пароль'),
           );
         },
       ),
@@ -238,7 +242,7 @@ class _EmailTextField extends StatelessWidget {
               labelText: "Почта",
               errorText: emailError == EmailError.noError
                   ? null
-                  : emailError.toString(),
+                  : 'Пользователь с таким email не обнаружен',
             ),
           );
         },
