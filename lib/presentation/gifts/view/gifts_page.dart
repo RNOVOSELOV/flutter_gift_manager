@@ -7,6 +7,7 @@ import 'package:gift_manager/extentions/theme_extensions.dart';
 import 'package:gift_manager/navigation/route_name.dart';
 import 'package:gift_manager/presentation/gift/view/gift_page.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
+import 'package:gift_manager/resources/app_colors.dart';
 import 'package:gift_manager/resources/app_illustrations.dart';
 
 class GiftsPage extends StatelessWidget {
@@ -181,7 +182,7 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    return Column(
+    return Stack(
       children: [
         Expanded(
           child: ListView.separated(
@@ -219,16 +220,20 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed(
-                RouteName.gift.route,
-                arguments: const GiftPageArgs(giftName: null),
+
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed(
+                  RouteName.gift.route,
+                  arguments: const GiftPageArgs(giftName: null),
+                ),
+                child: const Text('Добавить подарок'),
               ),
-              child: const Text('Добавить подарок'),
             ),
           ),
         ),
@@ -311,21 +316,38 @@ class _GiftCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           color: Theme.of(context).cardColor,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              gift.name,
-              style: context.theme.h2,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    gift.name,
+                    style: context.theme.h2,
+                  ),
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  Text(
+                    'GIFT ITEM',
+                    style: context.theme.h3,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 6,
-            ),
-            Text(
-              'GIFT ITEM',
-              style: context.theme.h3,
-            ),
+            Container(
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.theme.dividerColor,
+              ),
+              alignment: Alignment.center,
+              child: Text('?',style: context.theme.h3,),
+            )
           ],
         ),
       ),

@@ -21,7 +21,7 @@ final darkTheme = _base.copyWith(
       fontSize: 16,
       height: 1.25,
       fontWeight: FontWeight.w500,
-      color: AppColors.darkWhite100,
+      color: AppColors.darkWhite60,
     ),
     headline4: const TextStyle(
       fontSize: 14,
@@ -49,10 +49,11 @@ final darkTheme = _base.copyWith(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       padding: MaterialStateProperty.all(const EdgeInsets.all(16)),
-      elevation: MaterialStateProperty.all(0),
+      elevation: MaterialStateProperty.all(4),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
+//      foregroundColor: MaterialStateProperty.all(AppColors.darkWhite100),
       textStyle: MaterialStateProperty.resolveWith(
         (states) {
           return states.contains(MaterialState.disabled)
@@ -158,4 +159,5 @@ final darkTheme = _base.copyWith(
     selectedItemColor: AppColors.darkDarkBlue100
   ),
   cardColor: AppColors.darkWhite20,
+  dividerColor: AppColors.darkWhite60,
 );

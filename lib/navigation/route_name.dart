@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 
 enum RouteName {
-  // "/" - изначальный route, переход на короый идет по умолчанию при старте приложения
+  // "/" - изначальный route, переход на котоый идет по умолчанию при старте приложения
   splash(route: "/"),
   //splash(route: "/splash"),
   gifts(route: "/gifts"),

@@ -49,11 +49,26 @@ final lightTheme = _base.copyWith(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       padding: MaterialStateProperty.all(const EdgeInsets.all(16)),
-      elevation: MaterialStateProperty.all(0),
+      elevation: MaterialStateProperty.all(4),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
-      foregroundColor: MaterialStateProperty.all(AppColors.lightWhite100),
+//      foregroundColor: MaterialStateProperty.all(AppColors.lightWhite100),
+      textStyle: MaterialStateProperty.resolveWith(
+            (states) {
+          return states.contains(MaterialState.disabled)
+              ? const TextStyle(
+            color: AppColors.lightWhite100,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          )
+              : const TextStyle(
+            color: AppColors.lightWhite100,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          );
+        },
+      ),
       backgroundColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.disabled)) {
           return AppColors.lightLightBlue70;
@@ -144,4 +159,5 @@ final lightTheme = _base.copyWith(
       selectedItemColor: AppColors.lightDarkBlue100
   ),
   cardColor: const Color(0xFFF0F2F7),
+  dividerColor: const Color(0x2915192C),
 );
