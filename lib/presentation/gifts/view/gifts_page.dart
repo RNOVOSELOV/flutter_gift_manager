@@ -194,8 +194,8 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
               top: 32 + mediaQuery.padding.top,
             ),
             separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemCount:
-                widget.gifts.length + 1 + (_haveExtraBottomWidget ? 1 : 0),
+            itemCount: widget.gifts.length + 1 + 1,
+            // (_haveExtraBottomWidget ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == 0) {
                 return const Text(
@@ -207,12 +207,16 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
               if (index == widget.gifts.length + 1) {
                 if (widget.showLoading) {
                   return const _ListViewLastProgressElement();
-                } else {
+                } else if (widget.showError) {
                   if (!widget.showError) {
                     debugPrint(
                         'index == gifts.length + 1 but showLoading = false and showError = false');
                   }
                   return const _ListViewLastErrorElement();
+                } else {
+                  return const SizedBox(
+                    height: 32,
+                  );
                 }
               }
               final gift = widget.gifts[index - 1];
@@ -220,7 +224,6 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
             },
           ),
         ),
-
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
@@ -241,7 +244,7 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
     );
   }
 
-  bool get _haveExtraBottomWidget => widget.showLoading || widget.showError;
+  bool get _haveExtraBottomWidget => true; // widget.showLoading || widget.showError;
 }
 
 class _ListViewLastProgressElement extends StatelessWidget {
@@ -253,6 +256,7 @@ class _ListViewLastProgressElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 128,
+      padding: const EdgeInsets.only(bottom: 32),
       alignment: Alignment.center,
       child: const CircularProgressIndicator(),
     );
@@ -267,6 +271,7 @@ class _ListViewLastErrorElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.only(bottom: 32),
       height: 128,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -346,7 +351,10 @@ class _GiftCard extends StatelessWidget {
                 color: context.theme.dividerColor,
               ),
               alignment: Alignment.center,
-              child: Text('?',style: context.theme.h3,),
+              child: Text(
+                '?',
+                style: context.theme.h3,
+              ),
             )
           ],
         ),
