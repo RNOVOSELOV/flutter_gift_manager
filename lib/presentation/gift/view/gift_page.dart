@@ -74,7 +74,6 @@ class _GiftPageWidgetState extends State<_GiftPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(),
@@ -88,10 +87,9 @@ class _GiftPageWidgetState extends State<_GiftPageWidget> {
                     height: 14,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 16,
                       right: 16,
-                      top: mediaQuery.padding.top,
                     ),
                     child: Text(
                       'Добавить подарок',
@@ -122,7 +120,7 @@ class _GiftPageWidgetState extends State<_GiftPageWidget> {
                       autocorrect: false,
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "Название",
                         // errorText: error?.toString(),
                       ),
@@ -189,13 +187,60 @@ class _GiftPageWidgetState extends State<_GiftPageWidget> {
                       ),
                     ),
                   ),
+                  const _GoToLinkButton(),
                 ],
               ),
             ),
-            _UpdateGiftButton (giftId: null,),
+            const _UpdateGiftButton(
+              giftId: null,
+            ),
+            const _DeleteGiftButton(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DeleteGiftButton extends StatelessWidget {
+  const _DeleteGiftButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: TextButton(
+          onPressed: () {},
+          child: Text(
+            "Удалить подарок",
+            style: TextStyle(color: context.theme.hintColor),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GoToLinkButton extends StatelessWidget {
+  const _GoToLinkButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(4),
+          child: TextButton(
+              onPressed: () {},
+              child: const Text("Перейти по ссылке")),
+        ),
+        const Spacer(),
+      ],
     );
   }
 }

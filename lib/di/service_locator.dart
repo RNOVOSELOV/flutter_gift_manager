@@ -14,6 +14,7 @@ import 'package:gift_manager/presentation/gift/bloc/gift_bloc.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
 import 'package:gift_manager/presentation/home/bloc/home_bloc.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
+import 'package:gift_manager/presentation/peoples/bloc/peoples_bloc.dart';
 import 'package:gift_manager/presentation/registration/bloc/registration_bloc.dart';
 import 'package:gift_manager/presentation/settings/bloc/settings_bloc.dart';
 import 'package:gift_manager/presentation/splash/bloc/splash_bloc.dart';
@@ -96,8 +97,11 @@ void _setupBlocks() {
         tokenRepository: sl.get<TokenRepository>(),
         unauthorizedApiService: sl.get<UnauthorizedApiService>(),
       ));
-  sl.registerFactory(
-      () => SplashBloc(tokenRepository: sl.get<TokenRepository>()));
+  sl.registerFactory(() => SplashBloc(
+        tokenRepository: sl.get<TokenRepository>(),
+        customTheme: sl.get<CustomTheme>(),
+        settingsRepository: sl.get<SettingsRepository>(),
+      ));
   sl.registerFactory(() => HomeBloc(
         userRepository: sl.get<UserRepository>(),
         logoutInteractor: sl.get<LogoutInteractor>(),
@@ -115,4 +119,7 @@ void _setupBlocks() {
         customTheme: sl.get<CustomTheme>(),
       ));
   sl.registerFactory(() => GiftBloc());
+
+  sl.registerFactory(
+      () => PeoplesBloc(authorizedApiService: sl.get<AuthorizedApiService>()));
 }

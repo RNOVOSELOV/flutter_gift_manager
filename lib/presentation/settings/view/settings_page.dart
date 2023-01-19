@@ -229,9 +229,9 @@ class _LogoutButton extends StatelessWidget {
         onPressed: () {
           context.read<SettingsBloc>().add(const SettingsLogout());
         },
-        child: const Text(
+        child: Text(
           'Выйти',
-          style: TextStyle(color: AppColors.darkPink100, fontSize: 14),
+          style: TextStyle(color: context.theme.hintColor, fontSize: 14),
         ));
   }
 }

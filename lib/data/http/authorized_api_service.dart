@@ -3,6 +3,7 @@ import 'package:either_dart/either.dart';
 import 'package:gift_manager/data/http/base_api_service.dart';
 import 'package:gift_manager/data/http/model/api_error.dart';
 import 'package:gift_manager/data/http/model/gifts_response_dto.dart';
+import 'package:gift_manager/data/http/model/persons_response_dto.dart';
 
 class AuthorizedApiService extends BaseApiService {
   final Dio _dio;
@@ -22,6 +23,22 @@ class AuthorizedApiService extends BaseApiService {
         },
       );
       return GiftsResponseDto.fromJson(response.data);
+    });
+  }
+
+  Future<Either<ApiError, PersonsResponseDto>> getAllPeoples({
+    final int limit = 10,
+    final int offset = 0,
+  }) async {
+    return responseOrError(() async {
+      final response = await _dio.get(
+        '/user/persons',
+        queryParameters: {
+          'limit': limit,
+          'offset': offset,
+        },
+      );
+      return PersonsResponseDto.fromJson(response.data);
     });
   }
 }

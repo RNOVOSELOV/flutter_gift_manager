@@ -160,4 +160,5 @@ final lightTheme = _base.copyWith(
   ),
   cardColor: const Color(0xFFF0F2F7),
   dividerColor: const Color(0x2915192C),
+  hintColor: AppColors.lightPink100,
 );

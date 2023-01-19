@@ -36,7 +36,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     final user = await userRepository.getItem();
     final settings = await settingsRepository.getItem();
-    print('user: $user; settings: $settings');
     emit(SettingsParametersLoaded(
       userName: user?.name,
       userEmail: user?.email,

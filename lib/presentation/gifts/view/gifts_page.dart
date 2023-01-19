@@ -184,45 +184,43 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
     final mediaQuery = MediaQuery.of(context);
     return Stack(
       children: [
-        Expanded(
-          child: ListView.separated(
-            controller: _scrollController,
-            padding: EdgeInsets.only(
-              left: 24,
-              right: 24,
-              bottom: 32,
-              top: 32 + mediaQuery.padding.top,
-            ),
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemCount: widget.gifts.length + 1 + 1,
-            // (_haveExtraBottomWidget ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const Text(
-                  'Подарки:',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+        ListView.separated(
+          controller: _scrollController,
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            bottom: 32,
+            top: 32 + mediaQuery.padding.top,
+          ),
+          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          itemCount: widget.gifts.length + 1 + 1,
+          // (_haveExtraBottomWidget ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return const Text(
+                'Подарки:',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+              );
+            }
+            // Обработка ниженего элемента (отображение загрузки или ошибки в посленем элементе лист вью)
+            if (index == widget.gifts.length + 1) {
+              if (widget.showLoading) {
+                return const _ListViewLastProgressElement();
+              } else if (widget.showError) {
+                if (!widget.showError) {
+                  debugPrint(
+                      'index == gifts.length + 1 but showLoading = false and showError = false');
+                }
+                return const _ListViewLastErrorElement();
+              } else {
+                return const SizedBox(
+                  height: 32,
                 );
               }
-              // Обработка ниженего элемента (отображение загрузки или ошибки в посленем элементе лист вью)
-              if (index == widget.gifts.length + 1) {
-                if (widget.showLoading) {
-                  return const _ListViewLastProgressElement();
-                } else if (widget.showError) {
-                  if (!widget.showError) {
-                    debugPrint(
-                        'index == gifts.length + 1 but showLoading = false and showError = false');
-                  }
-                  return const _ListViewLastErrorElement();
-                } else {
-                  return const SizedBox(
-                    height: 32,
-                  );
-                }
-              }
-              final gift = widget.gifts[index - 1];
-              return _GiftCard(gift: gift);
-            },
-          ),
+            }
+            final gift = widget.gifts[index - 1];
+            return _GiftCard(gift: gift);
+          },
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -244,7 +242,8 @@ class _GiftsListWidgetState extends State<_GiftsListWidget> {
     );
   }
 
-  bool get _haveExtraBottomWidget => true; // widget.showLoading || widget.showError;
+  bool get _haveExtraBottomWidget =>
+      true; // widget.showLoading || widget.showError;
 }
 
 class _ListViewLastProgressElement extends StatelessWidget {

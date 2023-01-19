@@ -160,4 +160,5 @@ final darkTheme = _base.copyWith(
   ),
   cardColor: AppColors.darkWhite20,
   dividerColor: AppColors.darkWhite60,
+  hintColor: AppColors.darkPink100,
 );
