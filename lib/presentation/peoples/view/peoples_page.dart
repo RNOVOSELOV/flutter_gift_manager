@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gift_manager/data/http/model/persons_dto.dart';
 import 'package:gift_manager/di/service_locator.dart';
-import 'package:gift_manager/extentions/theme_extensions.dart';
+import 'package:gift_manager/extensions/theme_extensions.dart';
 import 'package:gift_manager/helpers.dart';
 import 'package:gift_manager/presentation/peoples/bloc/peoples_bloc.dart';
 import 'package:gift_manager/resources/app_illustrations.dart';
