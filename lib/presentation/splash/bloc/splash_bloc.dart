@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gift_manager/data/repository/settings_repository.dart';
 import 'package:gift_manager/data/repository/token_repository.dart';
+import 'package:gift_manager/di/service_locator.dart';
 import 'package:gift_manager/presentation/theme/custom_theme.dart';
 
 part 'splash_event.dart';
@@ -43,6 +44,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     if (token == null || token.isEmpty) {
       emit(const SplashUnauthorized());
     } else {
+      setupAuthorizedBlocks ();
       emit(const SplashAuthorized());
     }
   }

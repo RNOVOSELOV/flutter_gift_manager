@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gift_manager/di/service_locator.dart';
-import 'package:gift_manager/extentions/theme_extensions.dart';
+import 'package:gift_manager/extensions/theme_extensions.dart';
 import 'package:gift_manager/presentation/gift/bloc/gift_bloc.dart';
 
 class GiftPageArgs extends Equatable {

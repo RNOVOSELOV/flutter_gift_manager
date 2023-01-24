@@ -102,24 +102,27 @@ void _setupBlocks() {
         customTheme: sl.get<CustomTheme>(),
         settingsRepository: sl.get<SettingsRepository>(),
       ));
+}
+
+void setupAuthorizedBlocks () {
   sl.registerFactory(() => HomeBloc(
-        userRepository: sl.get<UserRepository>(),
-        logoutInteractor: sl.get<LogoutInteractor>(),
-        authorizedApiService: sl.get<AuthorizedApiService>(),
-        unauthorizedApiService: sl.get<UnauthorizedApiService>(),
-        tokenRepository: sl.get<TokenRepository>(),
-        refreshTokenRepository: sl.get<RefreshTokenRepository>(),
-      ));
+    userRepository: sl.get<UserRepository>(),
+    logoutInteractor: sl.get<LogoutInteractor>(),
+    authorizedApiService: sl.get<AuthorizedApiService>(),
+    unauthorizedApiService: sl.get<UnauthorizedApiService>(),
+    tokenRepository: sl.get<TokenRepository>(),
+    refreshTokenRepository: sl.get<RefreshTokenRepository>(),
+  ));
   sl.registerFactory(
-      () => GiftsBloc(authorizedApiService: sl.get<AuthorizedApiService>()));
+          () => GiftsBloc(authorizedApiService: sl.get<AuthorizedApiService>()));
   sl.registerFactory(() => SettingsBloc(
-        userRepository: sl.get<UserRepository>(),
-        settingsRepository: sl.get<SettingsRepository>(),
-        logoutInteractor: sl.get<LogoutInteractor>(),
-        customTheme: sl.get<CustomTheme>(),
-      ));
+    userRepository: sl.get<UserRepository>(),
+    settingsRepository: sl.get<SettingsRepository>(),
+    logoutInteractor: sl.get<LogoutInteractor>(),
+    customTheme: sl.get<CustomTheme>(),
+  ));
   sl.registerFactory(() => GiftBloc());
 
   sl.registerFactory(
-      () => PeoplesBloc(authorizedApiService: sl.get<AuthorizedApiService>()));
+          () => PeoplesBloc(authorizedApiService: sl.get<AuthorizedApiService>()));
 }

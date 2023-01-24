@@ -3,11 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gift_manager/data/http/model/gift_dto.dart';
 import 'package:gift_manager/di/service_locator.dart';
-import 'package:gift_manager/extentions/theme_extensions.dart';
+import 'package:gift_manager/extensions/theme_extensions.dart';
 import 'package:gift_manager/navigation/route_name.dart';
 import 'package:gift_manager/presentation/gift/view/gift_page.dart';
 import 'package:gift_manager/presentation/gifts/bloc/gifts_bloc.dart';
-import 'package:gift_manager/resources/app_colors.dart';
 import 'package:gift_manager/resources/app_illustrations.dart';
 
 class GiftsPage extends StatelessWidget {

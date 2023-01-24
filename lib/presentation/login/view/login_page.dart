@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gift_manager/data/model/request_error.dart';
 import 'package:gift_manager/di/service_locator.dart';
-import 'package:gift_manager/extentions/theme_extensions.dart';
+import 'package:gift_manager/extensions/theme_extensions.dart';
 import 'package:gift_manager/navigation/route_name.dart';
 import 'package:gift_manager/presentation/login/bloc/login_bloc.dart';
 import 'package:gift_manager/presentation/login/model/email_error.dart';

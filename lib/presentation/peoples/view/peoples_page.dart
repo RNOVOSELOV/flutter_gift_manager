@@ -155,22 +155,41 @@ class _PeoplesGridWidget extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     return Stack(
       children: [
-        const Text(
-          'Подарки:',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
-        ),
-        GridView.extent(
+        ListView(
           padding: EdgeInsets.only(
             left: 24,
             right: 24,
             bottom: 32,
             top: 32 + mediaQuery.padding.top,
           ),
-          childAspectRatio: 1,
-          maxCrossAxisExtent: 170,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          children:  _getGridElements(context, peoples),
+          children: [
+            const Text(
+              'Люди:',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+            ),
+            GridView.extent(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              childAspectRatio: 1,
+              maxCrossAxisExtent: 180,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              children: _getGridElements(context, peoples),
+            ),
+          ],
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text('Добавить'),
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -212,14 +231,20 @@ class _PeoplesGridWidget extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(person.name, style: context.theme.h2,),
+              child: Text(
+                person.name,
+                style: context.theme.h2,
+              ),
             ),
             const SizedBox(
               height: 6,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(getGiftCountString(10),style: context.theme.h3,),
+              child: Text(
+                getGiftCountString(10),
+                style: context.theme.h3,
+              ),
             ),
           ],
         ),
