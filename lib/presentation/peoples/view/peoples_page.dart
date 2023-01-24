@@ -176,6 +176,9 @@ class _PeoplesGridWidget extends StatelessWidget {
               mainAxisSpacing: 8,
               children: _getGridElements(context, peoples),
             ),
+            const SizedBox(
+              height: 44,
+            ),
           ],
         ),
         Align(
