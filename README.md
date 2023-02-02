@@ -2,6 +2,10 @@
 
 ## !!! Проект в процессе разработки !!!
 
+<p align="center">
+  <img src="https://github.com/RNOVOSELOV/flutter_gift_manager/blob/main/resources/gift.gif" width="210" height="420" />
+</p>
+
 ## О проекте
 
 Meнеджер подарков - не забудьте, что когда-то хотели купить близким!
@@ -12,7 +16,6 @@ Meнеджер подарков - не забудьте, что когда-то 
 Логин: test@test.qw
 Пароль: 123456
 ``` 
-
 
 
 ## Развитие проекта
