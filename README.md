@@ -1,6 +1,6 @@
 [<img src="https://storage.googleapis.com/cms-storage-bucket/6a07d8a62f4308d2b854.svg"  width="150">](https://flutter.dev/) 
 #  🎁&nbsp;&nbsp; Gift Manager
-<br/>
+<br/> 
 <br/>
 
 ## !!! Проект в процессе разработки !!!
